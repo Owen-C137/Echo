@@ -33,6 +33,10 @@ settings.json
 # Environment variables (sensitive data)
 .env
 
+# Packaged releases (ZIP files)
+packaged_releases/
+*.zip
+
 # Internal documentation (exclude all .md files except README.md and CHANGELOG.md)
 *.md
 !README.md
