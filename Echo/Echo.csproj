@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Echo</AssemblyName>
+    <RootNamespace>Echo</RootNamespace>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    
+    <!-- Version Information -->
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <InformationalVersion>1.0.0</InformationalVersion>
+    
+    <!-- Application Metadata -->
+    <Company>Echo Tools</Company>
+    <Product>Echo - Black Ops 3 Multi-Tool</Product>
+    <Copyright>Copyright © 2025</Copyright>
+    <Description>Black Ops 3 GDT Package Manager and Asset Tool</Description>
+    <Authors>Echo Tools</Authors>
+  </PropertyGroup>
+
+  <!-- Exclude AssemblyInfo from WPF designer temp projects -->
+  <ItemGroup Condition="$(MSBuildProjectName.Contains('_wpftmp'))">
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+    <Compile Remove="$(IntermediateOutputPath).NETCoreApp,Version=v8.0.AssemblyAttributes.cs" />
+  </ItemGroup>
+
+  <!-- Exclude EchoUpdater from main project -->
+  <ItemGroup>
+    <Compile Remove="EchoUpdater\**" />
+    <EmbeddedResource Remove="EchoUpdater\**" />
+    <None Remove="EchoUpdater\**" />
+    <Page Remove="EchoUpdater\**" />
+  </ItemGroup>
+
+  <!-- Prevent duplicate AssemblyInfo in WPF designer temp projects -->
+  <PropertyGroup>
+    <GenerateAssemblyInfo Condition="'$(BuildingInsideVisualStudio)' == 'true' or '$(DesignTimeBuild)' == 'true'">false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>

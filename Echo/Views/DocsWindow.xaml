@@ -1,0 +1,714 @@
+<Window x:Class="Echo.Views.DocsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Echo Documentation" 
+        Height="700" 
+        Width="1000"
+        WindowStartupLocation="CenterOwner"
+        Background="#F5F5F5"
+        WindowStyle="SingleBorderWindow">
+
+    <Window.Resources>
+        <Style x:Key="NavButton" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F0F0F0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#1E1E1E"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
+
+        <Style x:Key="SubTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="Margin" Value="0,20,0,12"/>
+        </Style>
+
+        <Style x:Key="BodyText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#555"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="LineHeight" Value="22"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <Style x:Key="CodeBlock" TargetType="Border">
+            <Setter Property="Background" Value="#F8F8F8"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+
+        <Style x:Key="InfoBox" TargetType="Border">
+            <Setter Property="Background" Value="#E8F4FD"/>
+            <Setter Property="BorderBrush" Value="#0E639C"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+
+        <Style x:Key="WarningBox" TargetType="Border">
+            <Setter Property="Background" Value="#FFF4E5"/>
+            <Setter Property="BorderBrush" Value="#FF9800"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar Navigation -->
+        <Border Grid.Column="0" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+            <StackPanel Margin="0,20,0,0">
+                <TextBlock Text="📖 Documentation" 
+                          FontSize="18" 
+                          FontWeight="Bold"
+                          Margin="16,0,0,20"
+                          Foreground="#1E1E1E"/>
+
+                <Button x:Name="BtnGettingStarted" 
+                        Style="{StaticResource NavButton}"
+                        Click="NavigateToGettingStarted">
+                    <TextBlock Text="🚀 Getting Started"/>
+                </Button>
+                
+                <Button x:Name="BtnSettings" 
+                        Style="{StaticResource NavButton}"
+                        Click="NavigateToSettings">
+                    <TextBlock Text="⚙️ Settings Guide"/>
+                </Button>
+                
+                <Button x:Name="BtnWorkflow" 
+                        Style="{StaticResource NavButton}"
+                        Click="NavigateToWorkflow">
+                    <TextBlock Text="🔄 Workflow &amp; Usage"/>
+                </Button>
+                
+                <Button x:Name="BtnAssetTypes" 
+                        Style="{StaticResource NavButton}"
+                        Click="NavigateToAssetTypes">
+                    <TextBlock Text="📦 Asset Types"/>
+                </Button>
+                
+                <Button x:Name="BtnTroubleshooting" 
+                        Style="{StaticResource NavButton}"
+                        Click="NavigateToTroubleshooting">
+                    <TextBlock Text="🔧 Troubleshooting"/>
+                </Button>
+                
+                <Button x:Name="BtnFAQ" 
+                        Style="{StaticResource NavButton}"
+                        Click="NavigateToFAQ">
+                    <TextBlock Text="❓ FAQ"/>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <!-- Content Area -->
+        <Grid Grid.Column="1">
+            <!-- Getting Started Panel -->
+            <ScrollViewer x:Name="GettingStartedPanel" Visibility="Visible" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="40">
+                    <TextBlock Text="Getting Started with Echo" Style="{StaticResource SectionTitle}"/>
+
+                    <TextBlock Style="{StaticResource BodyText}">
+                        Echo is a comprehensive tool for parsing Black Ops 3 GDT (Game Data Text) files and packaging assets for distribution.
+                        This tool automatically resolves dependencies, handles sound aliases, and creates ready-to-install ZIP packages.
+                    </TextBlock>
+
+                    <TextBlock Text="🎯 Quick Start" Style="{StaticResource SubTitle}"/>
+                    
+                    <Border Style="{StaticResource InfoBox}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C" Margin="0,0,0,8">Step 1: Configure BO3 Path</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                                Go to <Bold>Settings</Bold> and set your Black Ops 3 installation path (where the game is installed).
+                                Example: <Italic>D:\SteamLibrary\steamapps\common\Call of Duty Black Ops III</Italic>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource InfoBox}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C" Margin="0,0,0,8">Step 2: Load GDT Files</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                                Click <Bold>GDT Packer</Bold> from the launcher, then click <Bold>Browse GDT Files</Bold> to select your .gdt files.
+                                You can select multiple files at once.
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource InfoBox}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C" Margin="0,0,0,8">Step 3: Scan Assets</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                                Click <Bold>Scan Assets</Bold> to analyze your GDT and find all referenced files (models, textures, sounds, animations, effects).
+                                Echo will search your BO3 installation and report which files exist and which are missing.
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource InfoBox}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C" Margin="0,0,0,8">Step 4: Create Package</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                                Enter a package name and click <Bold>Create Package from Selection</Bold>.
+                                Echo will copy all files, resolve sound aliases, generate attachment GDTs, and create a ZIP package ready to share!
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="📋 What Echo Does" Style="{StaticResource SubTitle}"/>
+                    
+                    <TextBlock Style="{StaticResource BodyText}">
+                        • <Bold>Parses GDT files</Bold> - Extracts all asset definitions and file references<LineBreak/>
+                        • <Bold>Resolves paths</Bold> - Finds models, textures, animations, sounds, and effects<LineBreak/>
+                        • <Bold>Handles sound aliases</Bold> - Follows CSV chains and creates consolidated sound files<LineBreak/>
+                        • <Bold>Resolves attachments</Bold> - Finds weapon attachments from common GDT files<LineBreak/>
+                        • <Bold>Generates GDT files</Bold> - Creates minimal GDT files for cross-referenced assets<LineBreak/>
+                        • <Bold>Creates packages</Bold> - Builds ZIP files with proper BO3 directory structure<LineBreak/>
+                    </TextBlock>
+
+                    <TextBlock Text="⚡ Key Features" Style="{StaticResource SubTitle}"/>
+                    
+                    <Border Style="{StaticResource CodeBlock}">
+                        <StackPanel>
+                            <TextBlock FontFamily="Consolas" FontSize="12" Foreground="#333">
+                                ✓ Smart path resolution (sound_assets\, model_export\, xanim_export\)<LineBreak/>
+                                ✓ Recursive sound alias chaining (#alias → #alias → file.wav)<LineBreak/>
+                                ✓ Weapon attachment cross-GDT resolution<LineBreak/>
+                                ✓ FX file detection (fx\*.efx)<LineBreak/>
+                                ✓ Animation fallback (xanim_export\ → model_export\)<LineBreak/>
+                                ✓ Real-time progress tracking<LineBreak/>
+                                ✓ Missing file reporting<LineBreak/>
+                                ✓ Async package creation (non-blocking UI)
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Settings Guide Panel -->
+            <ScrollViewer x:Name="SettingsPanel" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="40">
+                    <TextBlock Text="Settings Guide" Style="{StaticResource SectionTitle}"/>
+
+                    <TextBlock Text="⚙️ General Settings" Style="{StaticResource SubTitle}"/>
+                    
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,4">Black Ops 3 Installation Path</TextBlock>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        The root directory where Black Ops 3 is installed. Echo uses this to locate all asset files.<LineBreak/>
+                        <Bold>Example:</Bold> D:\SteamLibrary\steamapps\common\Call of Duty Black Ops III<LineBreak/>
+                        <Italic>Note: This should be the folder containing 'share', 'model_export', 'sound_assets', etc.</Italic>
+                    </TextBlock>
+
+                    <TextBlock Text="📦 Packaging Settings" Style="{StaticResource SubTitle}"/>
+                    
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,4">Package Output Directory</TextBlock>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        Where to save created ZIP packages. Default is 'Packaged' folder in the Echo app directory.<LineBreak/>
+                        You can change this to any folder you prefer (e.g., your Desktop).
+                    </TextBlock>
+
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,4">Compression Level</TextBlock>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        • <Bold>No Compression</Bold> - Fastest, largest file size<LineBreak/>
+                        • <Bold>Fastest</Bold> - Quick compression, medium file size<LineBreak/>
+                        • <Bold>Optimal</Bold> - Best compression, smallest file size (recommended)
+                    </TextBlock>
+
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,4">Archive Structure</TextBlock>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        • <Bold>Direct (extract to BO3 root)</Bold> - Files extract directly to correct folders (recommended)<LineBreak/>
+                        • <Bold>Wrapped (package in root folder)</Bold> - Creates an extra wrapper folder
+                    </TextBlock>
+
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,4">Include Source GDT File(s) in Package</TextBlock>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        <Bold>Enabled:</Bold> Your original .gdt files are included in the package (recommended)<LineBreak/>
+                        <Bold>Disabled:</Bold> Only asset files are packaged, no .gdt files<LineBreak/>
+                        <Italic>Tip: Keep enabled so users can edit your assets in Asset Manager</Italic>
+                    </TextBlock>
+
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,4">Validate All Assets Before Packaging</TextBlock>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        <Bold>Enabled:</Bold> Echo verifies every file exists before creating package<LineBreak/>
+                        <Bold>Disabled:</Bold> Skips validation (faster but may include missing files)<LineBreak/>
+                        <Italic>Recommended: Keep enabled to avoid packaging broken mods</Italic>
+                    </TextBlock>
+
+                    <TextBlock Text="🔊 Sound Alias Handling" Style="{StaticResource SubTitle}"/>
+                    
+                    <TextBlock Style="{StaticResource BodyText}">
+                        Controls how Echo handles sound files referenced in your GDT:
+                    </TextBlock>
+
+                    <Border Style="{StaticResource InfoBox}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C">Consolidate (Recommended)</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                                Creates a custom CSV file containing <Bold>only</Bold> the sound aliases your GDT uses.<LineBreak/>
+                                Results in much smaller packages since you're not including the entire BO3 sound library.<LineBreak/>
+                                Default filename: <Italic>echo_consolidated.csv</Italic>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource CodeBlock}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold">Copy Full CSV Files</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                                Copies the entire original CSV files (can be very large).<LineBreak/>
+                                Use this if you want all sounds from a CSV, not just the ones you reference.
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource CodeBlock}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold">Skip Sounds</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                                Don't include any sound files in the package.<LineBreak/>
+                                Use this for model-only or texture-only packages.
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock FontWeight="SemiBold" Margin="0,16,0,4">Generate GDT File for Resolved Attachments</TextBlock>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        <Bold>Enabled:</Bold> Creates GDT files for weapon attachments found in common files (recommended)<LineBreak/>
+                        <Bold>Disabled:</Bold> Only copies attachment model files, no GDT definitions<LineBreak/>
+                        <LineBreak/>
+                        When enabled, Echo automatically detects attachment references in your weapon GDT (e.g., attachViewModel4),<LineBreak/>
+                        searches for those attachments by name in common GDT files (_wpn_t9_common.gdt, etc.),<LineBreak/>
+                        extracts their complete definitions (all properties), and creates a minimal GDT file<LineBreak/>
+                        with only the attachments your weapon actually uses.<LineBreak/>
+                        <LineBreak/>
+                        <Italic>Example: If your weapon references "attach_custom_scope_view", Echo will find and extract that specific attachment.</Italic>
+                    </TextBlock>
+
+                    <TextBlock Text="🔧 Advanced Settings" Style="{StaticResource SubTitle}"/>
+                    
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,4">Enable Logging</TextBlock>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        Enables detailed logging to help troubleshoot issues. Logs are saved in the Echo app directory.
+                    </TextBlock>
+
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,4">Auto Open Logs on Error</TextBlock>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        Automatically opens the log file when an error occurs (helpful for debugging).
+                    </TextBlock>
+
+                    <TextBlock FontWeight="SemiBold" Margin="0,0,0,4">Package Name Pattern</TextBlock>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        Template for automatic package naming. Uses placeholders:<LineBreak/>
+                        • <Bold>{date}</Bold> - Current date (YYYYMMDD)<LineBreak/>
+                        • <Bold>{time}</Bold> - Current time (HHMMSS)<LineBreak/>
+                        Default: echo_packaged_{date}_{time}
+                    </TextBlock>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Workflow Panel -->
+            <ScrollViewer x:Name="WorkflowPanel" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="40">
+                    <TextBlock Text="Workflow &amp; Usage" Style="{StaticResource SectionTitle}"/>
+
+                    <TextBlock Text="📁 Loading GDT Files" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        1. Click <Bold>Browse GDT Files</Bold> in the GDT Packer window<LineBreak/>
+                        2. Navigate to your source_data folder (e.g., source_data\t9_weapons\)<LineBreak/>
+                        3. Select one or more .gdt files<LineBreak/>
+                        4. Click <Bold>Open</Bold> - Echo will parse the GDT and show all assets
+                    </TextBlock>
+
+                    <Border Style="{StaticResource InfoBox}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C">💡 Tip</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                                You can load multiple GDT files at once if your mod uses multiple weapon or asset files!
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="🔍 Scanning Assets" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        After loading GDT files, click <Bold>Scan Assets</Bold> to:<LineBreak/>
+                        • Parse all asset definitions in your GDT<LineBreak/>
+                        • Search your BO3 installation for each referenced file<LineBreak/>
+                        • Resolve sound aliases from CSV files<LineBreak/>
+                        • Find weapon attachments in common GDT files<LineBreak/>
+                        • Detect FX files (effects)<LineBreak/>
+                        • Report which files exist and which are missing
+                    </TextBlock>
+
+                    <TextBlock Text="📊 Understanding Scan Results" Style="{StaticResource SubTitle}"/>
+                    <Border Style="{StaticResource CodeBlock}">
+                        <StackPanel>
+                            <TextBlock FontFamily="Consolas" FontSize="12" Foreground="#333">
+                                Assets: 156 total<LineBreak/>
+                                Found: 148 files (95%)<LineBreak/>
+                                Missing: 8 files (5%)<LineBreak/>
+                                Total Size: 42.3 MB<LineBreak/>
+                                <LineBreak/>
+                                Sound Aliases: 23 referenced<LineBreak/>
+                                Sound Files: 45 total (.wav/.flac)
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Style="{StaticResource BodyText}">
+                        • <Bold>Found %</Bold> - Higher is better (90%+ is good)<LineBreak/>
+                        • <Bold>Missing files</Bold> - Check the asset list (red X) to see what's missing<LineBreak/>
+                        • <Bold>Total Size</Bold> - Final package size (approximately)
+                    </TextBlock>
+
+                    <TextBlock Text="📦 Creating Packages" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        1. Review your scan results<LineBreak/>
+                        2. Enter a package name (e.g., "my_weapon_mod")<LineBreak/>
+                        3. Click <Bold>Create Package from Selection</Bold><LineBreak/>
+                        4. Watch the real-time progress window<LineBreak/>
+                        5. When complete, click <Bold>Open Output Folder</Bold> to view your package
+                    </TextBlock>
+
+                    <TextBlock Text="📂 Package Structure" Style="{StaticResource SubTitle}"/>
+                    <Border Style="{StaticResource CodeBlock}">
+                        <StackPanel>
+                            <TextBlock FontFamily="Consolas" FontSize="11" Foreground="#333">
+                                my_weapon_mod.zip<LineBreak/>
+                                ├── source_data\<LineBreak/>
+                                │   └── t9_weapons\<LineBreak/>
+                                │       ├── wpn_t9_ar_mygun.gdt (your GDT)<LineBreak/>
+                                │       └── _wpn_t9_common.gdt (attachments)<LineBreak/>
+                                ├── model_export\<LineBreak/>
+                                │   ├── wpn_t9_ar_mygun.xmodel_export<LineBreak/>
+                                │   └── attach_t9_laser_01.xmodel_export<LineBreak/>
+                                ├── xanim_export\<LineBreak/>
+                                │   └── wpn_t9_ar_mygun_reload.xanim_export<LineBreak/>
+                                ├── sound_assets\<LineBreak/>
+                                │   └── wpn\ar_mygun_fire.wav<LineBreak/>
+                                ├── sound\aliases\<LineBreak/>
+                                │   └── echo_consolidated.csv<LineBreak/>
+                                └── share\raw\fx\<LineBreak/>
+                                    └── muzzle_flash.efx
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource WarningBox}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Foreground="#FF9800">⚠️ Important</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                                Users should extract the ZIP directly to their Black Ops 3 root folder!<LineBreak/>
+                                Echo maintains the correct directory structure for drag-and-drop installation.
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Asset Types Panel -->
+            <ScrollViewer x:Name="AssetTypesPanel" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="40">
+                    <TextBlock Text="Asset Types" Style="{StaticResource SectionTitle}"/>
+
+                    <TextBlock Text="🎨 Models (.xmodel_export)" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        3D models for weapons, vehicles, characters, props, etc.<LineBreak/>
+                        <Bold>Location:</Bold> model_export\<LineBreak/>
+                        <Bold>Properties:</Bold> filename, model, submodelX_Name<LineBreak/>
+                        <Bold>Example:</Bold> wpn_t9_ar_rifle.xmodel_export
+                    </TextBlock>
+
+                    <TextBlock Text="🎬 Animations (.xanim_export)" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        Animation files for character movements, weapon reloads, etc.<LineBreak/>
+                        <Bold>Location:</Bold> xanim_export\ (fallback: model_export\)<LineBreak/>
+                        <Bold>Properties:</Bold> Animation properties in GDT<LineBreak/>
+                        <Bold>Example:</Bold> wpn_t9_ar_reload.xanim_export
+                    </TextBlock>
+
+                    <TextBlock Text="🖼️ Textures &amp; Images (.png, .dds)" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        Image files for textures, UI elements, HUD icons, etc.<LineBreak/>
+                        <Bold>Location:</Bold> model_export\ (with models)<LineBreak/>
+                        <Bold>Properties:</Bold> baseImage, normalMap, specularMap, colorMap, etc.<LineBreak/>
+                        <Bold>Example:</Bold> mtl_weapon_diffuse.png<LineBreak/>
+                        <LineBreak/>
+                        <Italic>Note: Echo skips engine placeholders like $white, $black, $identityNormalMap</Italic>
+                    </TextBlock>
+
+                    <TextBlock Text="🔊 Sound Aliases &amp; Files" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        <Bold>Sound Aliases</Bold> - Names referenced in GDT (e.g., "wpn_ar_fire")<LineBreak/>
+                        <Bold>CSV Files</Bold> - Located in sound\aliases\ (maps aliases to files)<LineBreak/>
+                        <Bold>Sound Files</Bold> - Actual .wav/.flac files in sound_assets\<LineBreak/>
+                        <LineBreak/>
+                        Echo follows the chain: GDT property → CSV alias → CSV file path → .wav file
+                    </TextBlock>
+
+                    <Border Style="{StaticResource CodeBlock}">
+                        <StackPanel>
+                            <TextBlock FontFamily="Consolas" FontSize="11" Foreground="#333">
+                                Example chain:<LineBreak/>
+                                1. GDT: "fireSound" = "wpn_ar_mygun_fire"<LineBreak/>
+                                2. CSV: wpn_ar_mygun_fire → sound_assets\wpn\ar_fire.wav<LineBreak/>
+                                3. Echo copies: sound_assets\wpn\ar_fire.wav
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="✨ Effects (.efx)" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        Visual effects for muzzle flashes, explosions, particles, etc.<LineBreak/>
+                        <Bold>Location:</Bold> share\raw\fx\<LineBreak/>
+                        <Bold>Detection:</Bold> Properties ending with "Effect" OR values starting with "fx\"<LineBreak/>
+                        <Bold>Example:</Bold> fx\weapon\muzzle_flash.efx
+                    </TextBlock>
+
+                    <TextBlock Text="🔫 Weapon Attachments" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        Scopes, lasers, grips, stocks, and any other attachments referenced from common GDT files.<LineBreak/>
+                        <Bold>Properties Detected:</Bold> attachViewModel1-99, attachWorldModel1-99<LineBreak/>
+                        <Bold>Source Files:</Bold> Usually in _wpn_t9_common.gdt or other files starting with "_"<LineBreak/>
+                        <Bold>Echo's Action:</Bold> Finds attachment by name in common GDT, extracts full definition, creates minimal GDT<LineBreak/>
+                        <Bold>Example Value:</Bold> "attach_custom_scope_view" (any attachment name works!)
+                    </TextBlock>
+
+                    <Border Style="{StaticResource InfoBox}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C">Smart Resolution</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                                Echo reads the VALUE from properties like "attachViewModel4" in your weapon GDT,<LineBreak/>
+                                searches common GDT files for an asset with that exact name,<LineBreak/>
+                                extracts the complete attachment definition with all 100+ properties,<LineBreak/>
+                                and generates a clean GDT file containing only the attachments you reference!<LineBreak/>
+                                <LineBreak/>
+                                <Bold>Works with any attachment name</Bold> - not limited to BO3 stock attachments.
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Troubleshooting Panel -->
+            <ScrollViewer x:Name="TroubleshootingPanel" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="40">
+                    <TextBlock Text="Troubleshooting" Style="{StaticResource SectionTitle}"/>
+
+                    <TextBlock Text="❌ Assets Not Found" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        <Bold>Problem:</Bold> Echo reports many missing files<LineBreak/>
+                        <Bold>Solutions:</Bold>
+                    </TextBlock>
+                    <Border Style="{StaticResource InfoBox}">
+                        <StackPanel>
+                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                                1. Verify your BO3 path is correct in Settings<LineBreak/>
+                                2. Check if files actually exist in your BO3 installation<LineBreak/>
+                                3. Make sure you've compiled your mod (run Asset Manager linker)<LineBreak/>
+                                4. Check if file paths in GDT are correct (relative to BO3 root)<LineBreak/>
+                                5. For custom assets, ensure they're in the right export folders
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="🔊 Sound Files Missing" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        <Bold>Problem:</Bold> Echo can't find sound files referenced in GDT<LineBreak/>
+                        <Bold>Solutions:</Bold>
+                    </TextBlock>
+                    <Border Style="{StaticResource InfoBox}">
+                        <StackPanel>
+                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                                1. Verify sound alias CSV files exist in sound\aliases\<LineBreak/>
+                                2. Check if sound files are in sound_assets\ (not share\raw\sound\)<LineBreak/>
+                                3. Make sure CSV references the correct file path<LineBreak/>
+                                4. Check for alias chains (alias → alias → file) - Echo follows these automatically
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="🔗 Attachments Not Resolved" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        <Bold>Problem:</Bold> Weapon attachments not being found<LineBreak/>
+                        <Bold>Solutions:</Bold>
+                    </TextBlock>
+                    <Border Style="{StaticResource InfoBox}">
+                        <StackPanel>
+                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                                1. Check if common GDT files exist (e.g., _wpn_t9_common.gdt)<LineBreak/>
+                                2. Verify "Generate GDT for attachments" is enabled in Settings<LineBreak/>
+                                3. Make sure attachment names in your GDT match those in common files<LineBreak/>
+                                4. Check the log file for "Resolved attachment model" messages
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="💾 Package Creation Fails" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        <Bold>Problem:</Bold> Error during package creation<LineBreak/>
+                        <Bold>Solutions:</Bold>
+                    </TextBlock>
+                    <Border Style="{StaticResource InfoBox}">
+                        <StackPanel>
+                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                                1. Check if output directory exists and is writable<LineBreak/>
+                                2. Ensure you have enough disk space<LineBreak/>
+                                3. Close any programs that might have the output file open<LineBreak/>
+                                4. Check the log file for specific error messages<LineBreak/>
+                                5. Try with a different output directory
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="📝 Checking Logs" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        Echo creates detailed log files to help troubleshoot issues:
+                    </TextBlock>
+                    <Border Style="{StaticResource CodeBlock}">
+                        <StackPanel>
+                            <TextBlock FontFamily="Consolas" FontSize="11" Foreground="#333">
+                                Log location: Echo app directory<LineBreak/>
+                                Filename: echo_log_YYYYMMDD.txt<LineBreak/>
+                                <LineBreak/>
+                                Contains:<LineBreak/>
+                                - All file scan results<LineBreak/>
+                                - Path resolution details<LineBreak/>
+                                - Error messages with stack traces<LineBreak/>
+                                - Package creation progress
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource WarningBox}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Foreground="#FF9800">💡 Still Having Issues?</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                                1. Enable "Enable Logging" in Settings → Advanced<LineBreak/>
+                                2. Reproduce the problem<LineBreak/>
+                                3. Check the log file for error details<LineBreak/>
+                                4. Make sure all file paths are correct and files exist<LineBreak/>
+                                5. Try scanning with a simple GDT first to verify Echo works
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- FAQ Panel -->
+            <ScrollViewer x:Name="FAQPanel" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="40">
+                    <TextBlock Text="Frequently Asked Questions" Style="{StaticResource SectionTitle}"/>
+
+                    <TextBlock Text="Q: What is a GDT file?" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        A: GDT (Game Data Text) files are Black Ops 3's asset definition files created in Asset Manager.
+                        They contain all the properties and references for weapons, vehicles, characters, and other game assets.
+                        Echo parses these files to find all the actual asset files (models, textures, sounds) your mod needs.
+                    </TextBlock>
+
+                    <TextBlock Text="Q: Why do I need Echo?" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        A: Manually packaging BO3 mods is tedious - you need to find every model, texture, sound, animation, and effect file,
+                        copy them to the right folders, resolve sound aliases from CSV files, and create the correct directory structure.
+                        Echo automates all of this, saving hours of work and preventing missing files.
+                    </TextBlock>
+
+                    <TextBlock Text="Q: Can I package multiple weapons at once?" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        A: Yes! You can load multiple GDT files at once. Echo will scan all of them and include all referenced assets
+                        in a single package. This is perfect for weapon packs or complete mod packages.
+                    </TextBlock>
+
+                    <TextBlock Text="Q: What's the difference between sound handling modes?" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        • <Bold>Consolidate</Bold> - Creates a custom CSV with only the sounds you use (smallest, recommended)<LineBreak/>
+                        • <Bold>Copy Full CSV</Bold> - Includes entire CSV files (larger, includes unused sounds)<LineBreak/>
+                        • <Bold>Skip Sounds</Bold> - No sound files in package (model/texture-only mods)
+                    </TextBlock>
+
+                    <TextBlock Text="Q: Why are some assets marked as missing?" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        A: Assets can be missing for several reasons:<LineBreak/>
+                        • File hasn't been exported/compiled in Asset Manager yet<LineBreak/>
+                        • Incorrect path in GDT file<LineBreak/>
+                        • Custom asset that doesn't exist in BO3 installation<LineBreak/>
+                        • File was deleted or moved<LineBreak/>
+                        <LineBreak/>
+                        Check the asset list (red X icons) to see which files are missing and verify they exist.
+                    </TextBlock>
+
+                    <TextBlock Text="Q: How do I install a package created by Echo?" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        A: Simply extract the ZIP file directly to your Black Ops 3 root folder.
+                        Echo maintains the correct directory structure, so files will automatically go to the right places.
+                        No manual copying needed!
+                    </TextBlock>
+
+                    <TextBlock Text="Q: Can I edit the generated attachment GDT?" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        A: Yes! The generated GDT files (like _wpn_t9_common.gdt) are standard GDT files that can be opened
+                        and edited in Asset Manager. Echo includes the complete asset definitions with all properties intact.
+                    </TextBlock>
+
+                    <TextBlock Text="Q: Does Echo modify my original files?" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        A: No! Echo only reads your GDT files and BO3 installation. It never modifies your original files.
+                        All package creation happens in a temporary directory, and only the final ZIP file is saved.
+                    </TextBlock>
+
+                    <TextBlock Text="Q: Why is my package so large?" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        A: Package size depends on your assets:<LineBreak/>
+                        • Models and textures are typically the largest<LineBreak/>
+                        • Sound files can be large (especially .wav format)<LineBreak/>
+                        • Using "Copy Full CSV" includes many unnecessary sounds<LineBreak/>
+                        <LineBreak/>
+                        Tips to reduce size:<LineBreak/>
+                        • Use "Consolidate" sound mode instead of "Copy Full CSV"<LineBreak/>
+                        • Use "Optimal" compression level<LineBreak/>
+                        • Only include assets you actually use
+                    </TextBlock>
+
+                    <TextBlock Text="Q: Can Echo package maps/zombies mods?" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        A: Echo is designed primarily for weapon and asset mods. For complete map packages,
+                        you'll need to include additional files (zone files, scripts, etc.) that Echo doesn't currently handle.
+                        However, you can use Echo to package the asset portion of your map mod!
+                    </TextBlock>
+
+                    <TextBlock Text="Q: What if I find a bug?" Style="{StaticResource SubTitle}"/>
+                    <TextBlock Style="{StaticResource BodyText}">
+                        A: Enable logging in Settings → Advanced, reproduce the issue, and check the log file for details.
+                        Most issues are related to incorrect BO3 paths or missing files, which the log will reveal.
+                    </TextBlock>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

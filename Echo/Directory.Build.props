@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Disable auto-generated AssemblyInfo for WPF designer temp projects -->
+    <GenerateAssemblyInfo Condition="'$(MSBuildProjectName)' != 'Echo'">false</GenerateAssemblyInfo>
+  </PropertyGroup>
+</Project>

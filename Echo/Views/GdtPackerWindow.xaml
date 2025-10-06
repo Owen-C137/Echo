@@ -1,0 +1,243 @@
+<Window x:Class="Echo.Views.GdtPackerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Echo - GDT Package Manager" 
+        Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Side Navigation -->
+        <Border Grid.Column="0" 
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <StackPanel Grid.Row="0" Margin="20">
+                    <TextBlock Text="GDT PACKER" 
+                              FontSize="18" 
+                              FontWeight="Bold"
+                              Foreground="{StaticResource PrimaryBrush}"/>
+                    <TextBlock Text="Package Manager" 
+                              FontSize="12" 
+                              Foreground="{StaticResource SubtleBrush}"
+                              Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <!-- Navigation Menu -->
+                <StackPanel Grid.Row="1" Margin="12">
+                    <Button x:Name="BtnScanCreate" 
+                            Content="📦 Scan &amp; Create" 
+                            Style="{StaticResource ToolButton}"
+                            Padding="16,12"
+                            Margin="0,0,0,8"
+                            Click="NavigateToScanCreate"/>
+                    
+                    <Button x:Name="BtnAssetTree" 
+                            Content="🌲 Asset Tree" 
+                            Style="{StaticResource ToolButton}"
+                            Padding="16,12"
+                            Margin="0,0,0,8"
+                            Click="NavigateToAssetTree"/>
+                    
+                    <Separator Margin="0,12"/>
+                    
+                    <Button Content="⚙️ Settings" 
+                            Style="{StaticResource ToolButton}"
+                            Padding="16,12"
+                            Margin="0,8,0,8"
+                            Click="OpenSettings"/>
+                </StackPanel>
+
+                <!-- Back Button -->
+                <Button Grid.Row="2" 
+                        Content="← Back to Launcher" 
+                        Margin="12"
+                        Click="BackToLauncher"/>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <Border Grid.Column="1" Background="{StaticResource BackgroundBrush}">
+            <Grid>
+                <!-- Content Frames -->
+                <Grid x:Name="ScanCreatePanel" Visibility="Visible">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="32">
+                            <TextBlock Text="Scan &amp; Create Package" 
+                                      FontSize="28" 
+                                      FontWeight="Bold"
+                                      Margin="0,0,0,8"/>
+                            <TextBlock Text="Select GDT files to scan for assets and create a package" 
+                                      FontSize="14" 
+                                      Foreground="{StaticResource SubtleBrush}"
+                                      Margin="0,0,0,32"/>
+
+                            <!-- GDT Files Section -->
+                            <TextBlock Text="1. Select GDT Files" 
+                                      FontSize="18" 
+                                      FontWeight="SemiBold"
+                                      Margin="0,0,0,12"/>
+                            
+                            <Border Background="{StaticResource SurfaceBrush}"
+                                   BorderBrush="{StaticResource BorderBrush}"
+                                   BorderThickness="1"
+                                   CornerRadius="8"
+                                   Padding="16"
+                                   Margin="0,0,0,16">
+                                <StackPanel>
+                                    <ListBox x:Name="GdtFilesList"
+                                            Height="200"
+                                            Margin="0,0,0,12">
+                                        <!-- Files will be added here -->
+                                    </ListBox>
+                                    
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="+ Add GDT Files" 
+                                               Width="140"
+                                               Margin="0,0,8,0"
+                                               Click="AddGdtFiles"/>
+                                        <Button Content="Remove Selected" 
+                                               Width="140"
+                                               Click="RemoveGdtFile"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Scan Section -->
+                            <TextBlock Text="2. Scan Assets" 
+                                      FontSize="18" 
+                                      FontWeight="SemiBold"
+                                      Margin="0,24,0,12"/>
+                            
+                            <Border Background="{StaticResource SurfaceBrush}"
+                                   BorderBrush="{StaticResource BorderBrush}"
+                                   BorderThickness="1"
+                                   CornerRadius="8"
+                                   Padding="16"
+                                   Margin="0,0,0,16">
+                                <StackPanel>
+                                    <TextBlock Text="Scan the selected GDT files to discover all referenced assets and dependencies."
+                                              Foreground="{StaticResource SubtleBrush}"
+                                              TextWrapping="Wrap"
+                                              Margin="0,0,0,16"/>
+                                    
+                                    <Button x:Name="ScanButton"
+                                           Content="🔍 Start Scan" 
+                                           Style="{StaticResource PrimaryButton}"
+                                           Width="200"
+                                           Padding="16,10"
+                                           HorizontalAlignment="Left"
+                                           Click="StartScan"/>
+                                    
+                                    <TextBlock x:Name="ScanStatus" 
+                                              Text="Ready to scan..."
+                                              Margin="0,12,0,0"
+                                              Foreground="{StaticResource SubtleBrush}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Package Name Section -->
+                            <TextBlock Text="3. Package Name" 
+                                      FontSize="18" 
+                                      FontWeight="SemiBold"
+                                      Margin="0,24,0,12"/>
+                            
+                            <Border Background="{StaticResource SurfaceBrush}"
+                                   BorderBrush="{StaticResource BorderBrush}"
+                                   BorderThickness="1"
+                                   CornerRadius="8"
+                                   Padding="16"
+                                   Margin="0,0,0,16">
+                                <StackPanel>
+                                    <TextBlock Text="Enter a custom package name (or leave blank for auto-generated name)"
+                                              Foreground="{StaticResource SubtleBrush}"
+                                              TextWrapping="Wrap"
+                                              Margin="0,0,0,8"/>
+                                    
+                                    <TextBox x:Name="PackageNameTextBox"
+                                            Padding="10"
+                                            Height="36"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Create Package Section -->
+                            <TextBlock Text="4. Create Package" 
+                                      FontSize="18" 
+                                      FontWeight="SemiBold"
+                                      Margin="0,24,0,12"/>
+                            
+                            <Border Background="{StaticResource SurfaceBrush}"
+                                   BorderBrush="{StaticResource BorderBrush}"
+                                   BorderThickness="1"
+                                   CornerRadius="8"
+                                   Padding="16">
+                                <StackPanel>
+                                    <Button x:Name="CreatePackageButton"
+                                           Content="📦 Create Package" 
+                                           Style="{StaticResource PrimaryButton}"
+                                           Width="200"
+                                           Padding="16,10"
+                                           HorizontalAlignment="Left"
+                                           IsEnabled="False"
+                                           Click="CreatePackage"/>
+                                    
+                                    <TextBlock x:Name="PackageStatus" 
+                                              Text="Scan assets first before creating a package."
+                                              Margin="0,12,0,0"
+                                              Foreground="{StaticResource SubtleBrush}"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+
+                <Grid x:Name="AssetTreePanel" Visibility="Collapsed">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="32">
+                            <TextBlock Text="Asset Tree" 
+                                      FontSize="28" 
+                                      FontWeight="Bold"
+                                      Margin="0,0,0,8"/>
+                            <TextBlock Text="View discovered assets and their dependencies" 
+                                      FontSize="14" 
+                                      Foreground="{StaticResource SubtleBrush}"
+                                      Margin="0,0,0,32"/>
+
+                            <Border Background="{StaticResource SurfaceBrush}"
+                                   BorderBrush="{StaticResource BorderBrush}"
+                                   BorderThickness="1"
+                                   CornerRadius="8"
+                                   Padding="16">
+                                <StackPanel>
+                                    <TreeView x:Name="AssetTreeView" Height="400">
+                                        <!-- Asset tree will be populated here -->
+                                    </TreeView>
+                                    
+                                    <Button Content="📦 Create Package from Selection" 
+                                           Style="{StaticResource PrimaryButton}"
+                                           Width="250"
+                                           Margin="0,16,0,0"
+                                           Padding="16,10"
+                                           HorizontalAlignment="Left"
+                                           Click="CreatePackage"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

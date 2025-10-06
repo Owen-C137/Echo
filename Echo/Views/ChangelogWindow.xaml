@@ -1,0 +1,231 @@
+<Window x:Class="Echo.Views.ChangelogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Changelog - Echo" 
+        Height="600" 
+        Width="800"
+        WindowStartupLocation="CenterOwner"
+        Background="#F5F5F5"
+        WindowStyle="SingleBorderWindow">
+
+    <Window.Resources>
+        <Style x:Key="VersionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#1E1E1E"/>
+            <Setter Property="Margin" Value="0,20,0,12"/>
+        </Style>
+
+        <Style x:Key="VersionDate" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#666"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <Style x:Key="CategoryTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="Margin" Value="0,12,0,8"/>
+        </Style>
+
+        <Style x:Key="ChangeItem" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#555"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="20,0,0,6"/>
+        </Style>
+
+        <Style x:Key="NewBadge" TargetType="Border">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="CornerRadius" Value="3"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="Margin" Value="8,0,0,0"/>
+        </Style>
+
+        <Style x:Key="FixBadge" TargetType="Border">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="CornerRadius" Value="3"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="Margin" Value="8,0,0,0"/>
+        </Style>
+
+        <Style x:Key="ImproveBadge" TargetType="Border">
+            <Setter Property="Background" Value="#FF9800"/>
+            <Setter Property="CornerRadius" Value="3"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="Margin" Value="8,0,0,0"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" 
+                Background="White" 
+                BorderBrush="#E0E0E0" 
+                BorderThickness="0,0,0,1"
+                Padding="32,24">
+            <StackPanel>
+                <TextBlock Text="📋 Changelog" 
+                          FontSize="28" 
+                          FontWeight="Bold"
+                          Foreground="#1E1E1E"/>
+                <TextBlock x:Name="CurrentVersionText"
+                          Text="Current Version: 1.0.0" 
+                          FontSize="14" 
+                          Foreground="#666"
+                          Margin="0,8,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Changelog Content -->
+        <ScrollViewer Grid.Row="1" 
+                     VerticalScrollBarVisibility="Auto"
+                     Padding="32,0,32,32">
+            <StackPanel>
+                
+                <!-- Version 1.0.0 -->
+                <Border Background="White" 
+                        BorderBrush="#E0E0E0" 
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="24"
+                        Margin="0,20,0,0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Version 1.0.0" Style="{StaticResource VersionTitle}"/>
+                            <Border Style="{StaticResource NewBadge}" VerticalAlignment="Center">
+                                <TextBlock Text="CURRENT" FontSize="11" FontWeight="Bold" Foreground="White"/>
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Text="October 6, 2025" Style="{StaticResource VersionDate}"/>
+
+                        <TextBlock Text="🎉 New Features" Style="{StaticResource CategoryTitle}"/>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • <Bold>Interactive Documentation System</Bold> - Comprehensive in-app help with categorized sections
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • <Bold>Changelog Window</Bold> - View version history and update information
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • <Bold>Weapon Attachment Detection</Bold> - Automatically resolves attachments from common GDT files
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • <Bold>Animation Sound Support</Bold> - Detects and includes sound aliases from animation assets (reload, first raise, etc.)
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • <Bold>Smart GDT Generation</Bold> - Creates minimal GDT files for cross-referenced assets
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • <Bold>Consolidated Sound Aliases</Bold> - Generates optimized CSV files with only needed sounds
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • <Bold>Real-time Progress Tracking</Bold> - Live updates during package creation
+                        </TextBlock>
+
+                        <TextBlock Text="🔧 Improvements" Style="{StaticResource CategoryTitle}"/>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Proper CSV header generation for Black Ops 3 compatibility (98 columns)
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Implicit animation file path detection (asset_name.xanim_export)
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Enhanced attachment model detection (attachViewModel1-99, attachWorldModel1-99)
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Settings-based workflow (removed redundant dialogs)
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Exact source GDT naming for generated attachment files
+                        </TextBlock>
+
+                        <TextBlock Text="🐛 Bug Fixes" Style="{StaticResource CategoryTitle}"/>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Fixed animation assets being discarded during GDT parsing
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Fixed missing customnote sound aliases from animations
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Fixed attachment GDT naming to match source files exactly
+                        </TextBlock>
+
+                        <TextBlock Text="📦 Package Features" Style="{StaticResource CategoryTitle}"/>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Complete asset dependency scanning (models, textures, sounds, animations, effects)
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Automatic directory structure preservation
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Multiple compression levels (No Compression, Fastest, Optimal)
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Configurable archive structure (Direct or Wrapped)
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}">
+                            • Optional asset validation before packaging
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+                <!-- Future Versions Placeholder -->
+                <Border Background="#F8F8F8" 
+                        BorderBrush="#E0E0E0" 
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="24"
+                        Margin="0,16,0,0">
+                    <StackPanel>
+                        <TextBlock Text="🚀 Coming Soon" 
+                                  FontSize="18" 
+                                  FontWeight="Bold"
+                                  Foreground="#666"
+                                  Margin="0,0,0,12"/>
+                        <TextBlock Style="{StaticResource ChangeItem}" Foreground="#666">
+                            • Automatic update checker and installer
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}" Foreground="#666">
+                            • Asset converter utilities
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}" Foreground="#666">
+                            • Map packaging support
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}" Foreground="#666">
+                            • Batch processing for multiple GDT files
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource ChangeItem}" Foreground="#666">
+                            • Asset preview and validation tools
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" 
+                Background="White" 
+                BorderBrush="#E0E0E0" 
+                BorderThickness="0,1,0,0"
+                Padding="24,16">
+            <Grid>
+                <TextBlock Text="For more information, visit the documentation" 
+                          Foreground="#666"
+                          VerticalAlignment="Center"/>
+                <Button Content="Close" 
+                        Width="100"
+                        Height="32"
+                        HorizontalAlignment="Right"
+                        Click="Close_Click"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

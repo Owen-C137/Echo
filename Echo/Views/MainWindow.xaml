@@ -1,0 +1,380 @@
+<Window x:Class="Echo.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Echo" 
+        Height="700" 
+        Width="1100"
+        MinHeight="600"
+        MinWidth="900"
+        WindowStartupLocation="CenterScreen">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Menu Bar -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Settings" Click="Settings_Click"/>
+                <Separator/>
+                <MenuItem Header="_Exit" Click="Exit_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_Documentation" Click="Docs_Click"/>
+                <Separator/>
+                <MenuItem Header="_About" Click="About_Click"/>
+                <MenuItem Header="_View Logs" Click="ViewLogs_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Main Content with Tabs -->
+        <TabControl Grid.Row="1" Margin="16">
+            
+            <!-- Tab 1: Scan & Create -->
+            <TabItem Header="Scan &amp; Create">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="24">
+                        <!-- Header -->
+                        <TextBlock Text="📂 GDT FILES TO PACKAGE" 
+                                 FontSize="20" 
+                                 FontWeight="SemiBold"
+                                 Margin="0,0,0,16"/>
+
+                        <!-- GDT File List -->
+                        <Border BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                MinHeight="250"
+                                Padding="12"
+                                Margin="0,0,0,16">
+                            <StackPanel>
+                                <!-- Sample GDT Entry -->
+                                <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                                        CornerRadius="4"
+                                        Padding="16"
+                                        Margin="0,0,0,12">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <TextBlock Grid.Column="0" 
+                                                 Text="📄" 
+                                                 FontSize="32"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,16,0"/>
+                                        
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="my_custom_weapons.gdt" 
+                                                     FontWeight="SemiBold"
+                                                     FontSize="14"/>
+                                            <TextBlock Text="source_data\_owens\" 
+                                                     Opacity="0.6" 
+                                                     FontSize="12"
+                                                     Margin="0,2,0,0"/>
+                                            <TextBlock Text="📊 Not yet scanned" 
+                                                     Opacity="0.6" 
+                                                     FontSize="12"
+                                                     Margin="0,4,0,0"/>
+                                        </StackPanel>
+                                        
+                                        <Button Grid.Column="2"
+                                                Content="✕"
+                                                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                                FontSize="16"
+                                                Width="32"
+                                                Height="32"/>
+                                    </Grid>
+                                </Border>
+
+                                <TextBlock Text="Click 'Browse for GDT Files' to add files..." 
+                                         Opacity="0.5"
+                                         HorizontalAlignment="Center"
+                                         Margin="0,48,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Info Box -->
+                        <Border Background="#0078D4" 
+                                CornerRadius="4"
+                                Padding="16"
+                                Margin="0,0,0,24">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="💡" FontSize="20" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="Tip: You can select multiple GDT files to package them together!" 
+                                         Foreground="White"
+                                         TextWrapping="Wrap"
+                                         VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Action Buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="BROWSE FOR GDT FILES"
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    Padding="24,12"
+                                    Margin="0,0,12,0"/>
+                            <Button Content="CLEAR ALL"
+                                    Padding="24,12"
+                                    Margin="0,0,12,0"/>
+                            <Button Content="🔍 SCAN ASSETS"
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    Padding="24,12"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Tab 2: Asset Tree -->
+            <TabItem Header="Asset Tree">
+                <Grid Margin="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left Panel -->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Summary -->
+                        <Border Grid.Row="0" 
+                                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                                CornerRadius="4"
+                                Padding="20"
+                                Margin="0,0,0,16">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="📊 SCAN SUMMARY" FontWeight="Bold" FontSize="16" Margin="0,0,0,12"/>
+                                    <TextBlock Text="✓ 2 GDT Files" Margin="0,4"/>
+                                    <TextBlock Text="✓ 23 Assets Found" Margin="0,4"/>
+                                    <TextBlock Text="  • 15 Images" Margin="16,2" Opacity="0.7"/>
+                                    <TextBlock Text="  • 8 Models" Margin="16,2" Opacity="0.7"/>
+                                    <TextBlock Text="  • 12 Materials" Margin="16,2" Opacity="0.7"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="⚠ 2 Missing Files" Margin="0,36,0,4" Foreground="#FFC107"/>
+                                    <TextBlock Text="📦 Total Size: 45.2 MB" Margin="0,4" FontWeight="SemiBold"/>
+                                    <Button Content="VIEW MISSING" Margin="0,12,0,0" HorizontalAlignment="Left"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Asset Tree -->
+                        <Border Grid.Row="1"
+                                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                                CornerRadius="4"
+                                Padding="16">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Text="🌲 ASSET TREE" FontWeight="Bold" FontSize="16" Margin="0,0,0,12"/>
+                                
+                                <TextBox Grid.Row="1" 
+                                       Text=""
+                                       Margin="0,0,0,12"/>
+
+                                <TreeView Grid.Row="2">
+                                    <TreeViewItem Header="📄 my_custom_weapons.gdt" IsExpanded="True">
+                                        <TreeViewItem Header="🖼️ Images (15)" IsExpanded="True">
+                                            <TreeViewItem Header="✓ i_dp28_c"/>
+                                            <TreeViewItem Header="✓ i_aa12_c"/>
+                                            <TreeViewItem Header="⚠ i_missing_texture" Foreground="#F44336"/>
+                                        </TreeViewItem>
+                                        <TreeViewItem Header="🎮 Models (8)"/>
+                                        <TreeViewItem Header="🎨 Materials (12)"/>
+                                    </TreeViewItem>
+                                    <TreeViewItem Header="📄 perk_machines.gdt">
+                                        <TreeViewItem Header="🖼️ Images (8)"/>
+                                        <TreeViewItem Header="🎮 Models (3)"/>
+                                    </TreeViewItem>
+                                </TreeView>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <GridSplitter Grid.Column="1" 
+                                Width="8" 
+                                HorizontalAlignment="Stretch" 
+                                Background="Transparent"/>
+
+                    <!-- Right Panel: Asset Details -->
+                    <Border Grid.Column="2"
+                            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                            CornerRadius="4"
+                            Padding="16">
+                        <StackPanel>
+                            <TextBlock Text="📝 ASSET DETAILS" FontWeight="Bold" FontSize="16" Margin="0,0,0,16"/>
+                            
+                            <TextBlock Text="Name:" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBlock Text="i_dp28_c" Margin="0,0,0,12"/>
+                            
+                            <TextBlock Text="Type:" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBlock Text="Image (Texture)" Margin="0,0,0,12"/>
+                            
+                            <TextBlock Text="File Path:" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBlock Text="model_export\_owens_mc\Weapons\dp28\dp28_1.png" 
+                                     TextWrapping="Wrap"
+                                     Margin="0,0,0,12"/>
+                            
+                            <TextBlock Text="Size:" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBlock Text="2.4 MB" Margin="0,0,0,12"/>
+                            
+                            <TextBlock Text="Status:" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBlock Text="✓ Found" Foreground="#4CAF50" FontWeight="SemiBold" Margin="0,0,0,12"/>
+
+                            <Separator Margin="0,16"/>
+
+                            <Button Content="LOCATE FILE IN EXPLORER" Margin="0,16,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 3: Create Package -->
+            <TabItem Header="Create Package">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="24" MaxWidth="800">
+                        
+                        <!-- Package Information -->
+                        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                                CornerRadius="4"
+                                Padding="24"
+                                Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="📦 PACKAGE INFORMATION" FontWeight="Bold" FontSize="18" Margin="0,0,0,20"/>
+
+                                <TextBlock Text="Package Name *" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                <TextBox Text="My Custom BO3 Weapons Pack" Margin="0,0,0,16"/>
+
+                                <TextBlock Text="Author" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                <TextBox Text="YourName" Margin="0,0,0,16"/>
+
+                                <TextBlock Text="Version" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                <TextBox Text="1.0.0" Width="150" HorizontalAlignment="Left" Margin="0,0,0,16"/>
+
+                                <TextBlock Text="Description" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                <TextBox TextWrapping="Wrap"
+                                       AcceptsReturn="True"
+                                       MinHeight="100"
+                                       VerticalScrollBarVisibility="Auto"
+                                       Text="Custom weapons pack including:&#x0a;- DP-28 LMG&#x0a;- AA-12 Shotgun&#x0a;- Custom textures and models"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Output Settings -->
+                        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                                CornerRadius="4"
+                                Padding="24"
+                                Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="💾 OUTPUT SETTINGS" FontWeight="Bold" FontSize="18" Margin="0,0,0,20"/>
+
+                                <TextBlock Text="Save Location" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                <Grid Margin="0,0,0,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0" Text="C:\Users\owenc\Desktop\MyWeaponsPack.echo" Margin="0,0,8,0"/>
+                                    <Button Grid.Column="1" Content="📁" Width="40"/>
+                                </Grid>
+
+                                <TextBlock Text="Package Format" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                <RadioButton Content="Echo Package (.echo) - Recommended" IsChecked="True" Margin="0,0,0,8"/>
+                                <RadioButton Content="ZIP Archive (.zip) - Basic" Margin="0,0,0,16"/>
+
+                                <TextBlock Text="Options" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                <CheckBox Content="Include GDT files (2 files)" IsChecked="True" Margin="0,4"/>
+                                <CheckBox Content="Include all assets (23 files, 45.2 MB)" IsChecked="True" Margin="0,4"/>
+                                <CheckBox Content="Generate installation guide" IsChecked="True" Margin="0,4"/>
+                                <CheckBox Content="Compress files (estimated: 32.1 MB)" IsChecked="True" Margin="0,4"/>
+                                <CheckBox Content="Create backup of existing files" IsChecked="False" Margin="0,4"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Action Buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="BACK" Padding="24,12" Margin="0,0,12,0"/>
+                            <Button Content="📦 CREATE PACKAGE" 
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    Padding="24,12"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Tab 4: Extract -->
+            <TabItem Header="Extract">
+                <Grid>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="500">
+                        <TextBlock Text="📥" FontSize="80" HorizontalAlignment="Center" Margin="0,0,0,24"/>
+                        <TextBlock Text="Install Package" 
+                                 FontSize="28" 
+                                 FontWeight="Bold" 
+                                 HorizontalAlignment="Center"
+                                 Margin="0,0,0,16"/>
+                        <TextBlock Text="Select an Echo package file to install it to your Black Ops III directory." 
+                                 FontSize="14" 
+                                 TextWrapping="Wrap"
+                                 TextAlignment="Center"
+                                 Opacity="0.7"
+                                 Margin="0,0,0,32"/>
+                        <Button Content="SELECT PACKAGE FILE" 
+                                Style="{StaticResource AccentButtonStyle}"
+                                Padding="32,16"
+                                FontSize="14"
+                                HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource SystemControlBackgroundAccentBrush}"
+                Height="32">
+            <Grid Margin="12,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0"
+                         x:Name="StatusBarText" 
+                         Text="Ready" 
+                         VerticalAlignment="Center"
+                         Foreground="White"
+                         FontSize="12"/>
+
+                <TextBlock Grid.Column="2"
+                         x:Name="Bo3PathStatus"
+                         Text="BO3 Path: Not Configured"
+                         VerticalAlignment="Center"
+                         Foreground="White"
+                         FontSize="12"
+                         Opacity="0.9"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
