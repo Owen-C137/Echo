@@ -11,6 +11,11 @@
 
 </div>
 
+> **🤖 Development Transparency Notice**  
+> This project was created with significant assistance from AI (GitHub Copilot & Claude). The AI handled most of the code generation, architecture, and implementation. As the project creator, I provided the vision, requirements, testing, and iteration feedback. I believe in being transparent about the development process and the role AI played in bringing this tool to life.
+> 
+> **All source code is open and available for review** - you can inspect every line to verify there's no malicious code, telemetry, or hidden functionality. The application only connects to GitHub's public API for update checks (which you can disable or verify in the source). This project is MIT licensed and built for the community.
+
 ---
 
 ## ✨ Features
@@ -82,6 +87,11 @@
 git clone https://github.com/Owen-C137/Echo.git
 cd Echo
 
+# (Optional) Configure GitHub token for higher API rate limits
+# Copy .env.example to .env and add your GitHub token
+cp .env.example .env
+# Edit .env and replace 'your_github_token_here' with your token
+
 # Restore dependencies
 dotnet restore
 
@@ -91,6 +101,12 @@ dotnet build
 # Run the application
 dotnet run --project Echo\Echo.csproj
 ```
+
+**Note on GitHub Token (Optional):**
+- Without a token: 60 API requests/hour (sufficient for normal use)
+- With a token: 5000 API requests/hour
+- Generate token at: https://github.com/settings/tokens (only needs `public_repo` read access)
+- Add to `.env` file (this file is gitignored and never pushed)
 
 ---
 

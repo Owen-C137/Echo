@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Reflection;
+using System.IO;
 using Echo.Models;
 
 namespace Echo.Services
@@ -20,9 +21,38 @@ namespace Echo.Services
             // GitHub API requires User-Agent header
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Echo-UpdateChecker");
             
-            // Note: GitHub token can be added here for higher rate limits (5000/hour vs 60/hour)
-            // For public releases, rate limit of 60/hour is sufficient for update checks
-            // _httpClient.DefaultRequestHeaders.Add("Authorization", "token YOUR_GITHUB_TOKEN_HERE");
+            // Try to load GitHub token from .env file for higher rate limits (5000/hour vs 60/hour)
+            TryLoadGitHubToken();
+        }
+
+        private static void TryLoadGitHubToken()
+        {
+            try
+            {
+                var envPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".env");
+                if (File.Exists(envPath))
+                {
+                    var lines = File.ReadAllLines(envPath);
+                    foreach (var line in lines)
+                    {
+                        if (line.StartsWith("GITHUB_TOKEN=") && !line.StartsWith("#"))
+                        {
+                            var token = line.Substring("GITHUB_TOKEN=".Length).Trim();
+                            if (!string.IsNullOrWhiteSpace(token) && token != "your_github_token_here")
+                            {
+                                _httpClient.DefaultRequestHeaders.Add("Authorization", $"token {token}");
+                                Logger.Info("GitHub token loaded from .env file - using higher rate limits");
+                                return;
+                            }
+                        }
+                    }
+                }
+                Logger.Info("No GitHub token configured - using standard rate limits (60/hour)");
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning($"Failed to load GitHub token from .env: {ex.Message}");
+            }
         }
 
         public async Task<UpdateInfo?> CheckForUpdatesAsync()
