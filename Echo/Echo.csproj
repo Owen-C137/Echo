@@ -8,14 +8,12 @@
     <AssemblyName>Echo</AssemblyName>
     <RootNamespace>Echo</RootNamespace>
     <ApplicationIcon>icon.ico</ApplicationIcon>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     
     <!-- Version Information -->
-    <Version>1.0.1</Version>
-    <AssemblyVersion>1.0.1.0</AssemblyVersion>
-    <FileVersion>1.0.1.0</FileVersion>
-    <InformationalVersion>1.0.1</InformationalVersion>
+    <Version>1.0.2</Version>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
+    <InformationalVersion>1.0.2</InformationalVersion>
     
     <!-- Application Metadata -->
     <Company>Echo Tools</Company>
@@ -38,6 +36,11 @@
   <ItemGroup Condition="$(MSBuildProjectName.Contains('_wpftmp'))">
     <Compile Remove="Properties\AssemblyInfo.cs" />
     <Compile Remove="$(IntermediateOutputPath).NETCoreApp,Version=v8.0.AssemblyAttributes.cs" />
+  </ItemGroup>
+
+  <!-- Exclude manual AssemblyInfo since we use auto-generation -->
+  <ItemGroup>
+    <Compile Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 
   <!-- Exclude EchoUpdater from main project -->

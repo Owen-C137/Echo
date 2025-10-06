@@ -5,6 +5,26 @@ All notable changes to Echo - Black Ops 3 GDT Parser & Packer will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-10-06
+
+### 🐛 Bug Fixes
+
+- **Version Display Fix**: Version number now correctly displays in launcher window
+  - Switched from manual AssemblyInfo.cs to auto-generated assembly attributes
+  - Version is now read from Echo.csproj (single source of truth)
+  - Eliminated duplicate attribute errors during compilation
+
+- **Update Detection Fix**: Update checker no longer incorrectly reports current version as available update
+  - Assembly version now properly set to match release version
+  - Version comparison logic working correctly
+
+### 🔧 Technical Improvements
+
+- **Simplified Version Management**: Version only needs to be changed in one place (Echo.csproj)
+  - Removed manual Properties/AssemblyInfo.cs file
+  - Enabled auto-generation of assembly attributes from project properties
+  - Version automatically propagates to all assembly metadata
+
 ## [1.0.1] - 2025-10-06
 
 ### 🎨 UI/UX Enhancements
