@@ -24,12 +24,14 @@
     <Description>Black Ops 3 GDT Package Manager and Asset Tool</Description>
     <Authors>Echo Tools</Authors>
     
-    <!-- Self-Contained Single File Settings -->
+    <!-- Single-file self-contained settings -->
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <!-- Exclude AssemblyInfo from WPF designer temp projects -->
@@ -45,11 +47,6 @@
     <None Remove="EchoUpdater\**" />
     <Page Remove="EchoUpdater\**" />
   </ItemGroup>
-
-  <!-- Prevent duplicate AssemblyInfo in WPF designer temp projects -->
-  <PropertyGroup>
-    <GenerateAssemblyInfo Condition="'$(BuildingInsideVisualStudio)' == 'true' or '$(DesignTimeBuild)' == 'true'">false</GenerateAssemblyInfo>
-  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

@@ -6,6 +6,6 @@ using System.Reflection;
 [assembly: AssemblyProduct("Echo - Black Ops 3 Multi-Tool")]
 [assembly: AssemblyCopyright("Copyright © 2025")]
 
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: AssemblyInformationalVersion("1.0.0")]
+[assembly: AssemblyVersion("1.0.1.0")]
+[assembly: AssemblyFileVersion("1.0.1.0")]
+[assembly: AssemblyInformationalVersion("1.0.1")]

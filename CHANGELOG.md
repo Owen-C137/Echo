@@ -48,17 +48,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Technical Changes
 - Added ToolTip styles to all theme files
 - Created DarkTheme.xaml, LightTheme.xaml, DevRawTheme.xaml, MidnightPurpleTheme.xaml
+- Implemented AssemblyResolve event handler to fix WPF pack:// URI loading in published builds
+- Configured single-file self-contained deployment for simplified distribution
+- Added comprehensive global exception handlers with crash logging
+- Removed debug symbols (PDB files) from release builds
+- Enabled compression for single-file deployments
+
+### 🐛 Bug Fixes
+- **CRITICAL**: Fixed WPF assembly loading issue in Release builds
+  - Resolved "Could not load file or assembly 'Echo'" error in published applications
+  - Added custom AssemblyResolve handler in App.xaml.cs
+  - WPF pack:// URIs now work correctly in single-file deployments
+  
+- **Build Configuration**: Optimized for deployment
+  - Single-file executables (Echo.exe, EchoUpdater.exe only)
+  - Self-contained builds include .NET runtime
+  - No external dependencies required
+  - Clean release packages without JSON/DLL files
 - Refactored settings to use Theme property (string) instead of UseDarkMode (bool)
 - Added theme fallback handling in App.xaml.cs
 - Fixed Midnight Purple SubtleBrush for better text contrast (#4A3A66)
+- Implemented AssemblyResolve handler to fix WPF pack:// URI loading in published builds
+- Configured single-file self-contained deployment for cleaner releases
+- Added global exception handlers for better error reporting and crash diagnostics
+- Set DebugType to 'none' to remove .pdb files from release builds
 
 #### Bug Fixes
+- **CRITICAL**: Fixed WPF assembly loading crash in published Release builds
+  - Added custom AssemblyResolve event handler in App.xaml.cs
+  - Resolves "Could not load file or assembly 'Echo'" error
+  - Fixes pack:// URI resource loading in .NET 8 single-file deployments
 - Fixed white backgrounds in themed windows
 - Fixed navigation button styles not matching theme
 - Fixed ComboBox dropdowns showing light blue system colors
 - Fixed DataGrid headers missing from original themes
 - Fixed button alignment and padding issues
 - Fixed hardcoded colors replaced with DynamicResource
+- Fixed release builds now properly self-contained (no external DLLs required)
+
+#### Build & Deployment
+- Release builds now generate single-file executables only
+- Echo.exe: 68.69 MB (self-contained, includes .NET runtime)
+- EchoUpdater.exe: 33.51 MB (self-contained)
+- No additional DLL or JSON files required for distribution
+- Enabled compression in single-file builds for smaller size
 
 ---
 
