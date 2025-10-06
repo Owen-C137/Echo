@@ -23,6 +23,13 @@
     <Copyright>Copyright © 2025</Copyright>
     <Description>Black Ops 3 GDT Package Manager and Asset Tool</Description>
     <Authors>Echo Tools</Authors>
+    
+    <!-- Self-Contained Single File Settings -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
   </PropertyGroup>
 
   <!-- Exclude AssemblyInfo from WPF designer temp projects -->

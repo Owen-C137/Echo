@@ -242,10 +242,10 @@ namespace Echo.Services
             try
             {
                 // Get paths
-                var currentDir = AppDomain.CurrentDomain.BaseDirectory;
+                var currentDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');  // Remove trailing backslash
                 var updaterPath = Path.Combine(currentDir, "EchoUpdater.exe");
                 var exePath = Process.GetCurrentProcess().MainModule?.FileName ?? Path.Combine(currentDir, "Echo.exe");
-                var backupPath = Path.Combine(Path.GetTempPath(), $"Echo_Backup_{DateTime.Now:yyyyMMdd_HHmmss}");
+                var backupPath = Path.Combine(Path.GetTempPath(), $"Echo_Backup_{DateTime.Now:yyyyMMdd_HHmmss}").TrimEnd('\\');
 
                 // Check if updater exists
                 if (!File.Exists(updaterPath))
@@ -262,15 +262,21 @@ namespace Echo.Services
                 Logger.Info($"Launching updater: {updaterPath}");
                 Logger.Info($"Parameters: --zip \"{zipPath}\" --install \"{currentDir}\" --exe \"{exePath}\" --backup \"{backupPath}\"");
 
+                // Build arguments properly for non-shell execution
+                // Paths with spaces need to be quoted, but we need to escape the quotes
+                var arguments = $"--zip \"{zipPath}\" --install \"{currentDir}\" --exe \"{exePath}\" --backup \"{backupPath}\"";
+
                 // Start the updater process
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = updaterPath,
-                    Arguments = $"--zip \"{zipPath}\" --install \"{currentDir}\" --exe \"{exePath}\" --backup \"{backupPath}\"",
-                    UseShellExecute = true,
+                    Arguments = arguments,
+                    UseShellExecute = false,
+                    CreateNoWindow = false,
                     WorkingDirectory = currentDir
                 };
 
+                Logger.Info($"Starting process with arguments: {arguments}");
                 Process.Start(startInfo);
 
                 // Close the current application

@@ -15,6 +15,14 @@ namespace EchoUpdater
             Console.WriteLine("╚════════════════════════════╝");
             Console.WriteLine();
 
+            // Debug: Show what we received
+            Console.WriteLine($"DEBUG: Received {args.Length} arguments:");
+            for (int i = 0; i < args.Length; i++)
+            {
+                Console.WriteLine($"  [{i}] = '{args[i]}'");
+            }
+            Console.WriteLine();
+
             try
             {
                 // Parse arguments
@@ -70,7 +78,36 @@ namespace EchoUpdater
 
                 // Step 3: Extract new version
                 Console.Write($"📂 Extracting update");
-                ZipFile.ExtractToDirectory(zipPath, installPath, overwriteFiles: true);
+                
+                // Extract ZIP but skip EchoUpdater.exe (it's currently running)
+                using (var archive = ZipFile.OpenRead(zipPath))
+                {
+                    foreach (var entry in archive.Entries)
+                    {
+                        // Skip EchoUpdater.exe as it's currently running
+                        if (entry.FullName.Equals("EchoUpdater.exe", StringComparison.OrdinalIgnoreCase))
+                        {
+                            Console.Write(".");
+                            continue;
+                        }
+
+                        var destinationPath = Path.Combine(installPath, entry.FullName);
+                        
+                        // Create directory if needed
+                        var destinationDir = Path.GetDirectoryName(destinationPath);
+                        if (!string.IsNullOrEmpty(destinationDir) && !Directory.Exists(destinationDir))
+                        {
+                            Directory.CreateDirectory(destinationDir);
+                        }
+
+                        // Extract file
+                        if (!string.IsNullOrEmpty(entry.Name))
+                        {
+                            entry.ExtractToFile(destinationPath, overwrite: true);
+                            Console.Write(".");
+                        }
+                    }
+                }
                 Console.WriteLine(" ✅");
 
                 // Step 4: Cleanup
