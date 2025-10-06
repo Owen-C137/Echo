@@ -241,16 +241,18 @@ namespace Echo.Services
         {
             try
             {
-                // Get paths
-                var currentDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');  // Remove trailing backslash
+                // For single-file executables, we need the actual EXE location, not the extraction temp folder
+                var exePath = Process.GetCurrentProcess().MainModule?.FileName ?? throw new InvalidOperationException("Cannot get executable path");
+                var currentDir = Path.GetDirectoryName(exePath) ?? throw new InvalidOperationException("Cannot get executable directory");
                 var updaterPath = Path.Combine(currentDir, "EchoUpdater.exe");
-                var exePath = Process.GetCurrentProcess().MainModule?.FileName ?? Path.Combine(currentDir, "Echo.exe");
                 var backupPath = Path.Combine(Path.GetTempPath(), $"Echo_Backup_{DateTime.Now:yyyyMMdd_HHmmss}").TrimEnd('\\');
 
                 // Check if updater exists
                 if (!File.Exists(updaterPath))
                 {
                     Logger.Error($"EchoUpdater.exe not found at: {updaterPath}");
+                    Logger.Error($"Current directory: {currentDir}");
+                    Logger.Error($"Executable path: {exePath}");
                     MessageBox.Show(
                         "Update installer not found. Please reinstall the application.",
                         "Update Error",

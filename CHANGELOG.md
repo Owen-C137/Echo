@@ -5,6 +5,21 @@ All notable changes to Echo - Black Ops 3 GDT Parser & Packer will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2025-10-06
+
+### 🐛 Bug Fixes
+
+- **Update Installer Path Fix**: Fixed "Update installer not found" error when attempting to update
+  - Corrected path resolution for single-file executables
+  - EchoUpdater.exe is now correctly located in the same directory as Echo.exe
+  - Added additional logging to diagnose updater path issues
+
+### 🔧 Technical Details
+
+- Changed from `AppDomain.CurrentDomain.BaseDirectory` to `Process.GetCurrentProcess().MainModule.FileName`
+- Single-file executables extract to temp folders at runtime, but updater stays in original directory
+- Fix ensures updater is found in the actual installation folder, not the temp extraction folder
+
 ## [1.0.2] - 2025-10-06
 
 ### 🐛 Bug Fixes
