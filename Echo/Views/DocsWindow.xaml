@@ -5,50 +5,64 @@
         Height="700" 
         Width="1000"
         WindowStartupLocation="CenterOwner"
-        Background="#F5F5F5"
+        Background="{DynamicResource BackgroundBrush}"
         WindowStyle="SingleBorderWindow">
 
     <Window.Resources>
         <Style x:Key="NavButton" TargetType="Button">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="16,12"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="0,0,0,4"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#F0F0F0"/>
-                </Trigger>
-            </Style.Triggers>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{DynamicResource SurfaceBrush}" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="Center"
+                                            TextElement.Foreground="{DynamicResource TextBrush}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource HoverBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style x:Key="SectionTitle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#1E1E1E"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="Margin" Value="0,0,0,20"/>
         </Style>
 
         <Style x:Key="SubTitle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="Margin" Value="0,20,0,12"/>
         </Style>
 
         <Style x:Key="BodyText" TargetType="TextBlock">
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Foreground" Value="#555"/>
+            <Setter Property="Foreground" Value="{DynamicResource SubtleBrush}"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="LineHeight" Value="22"/>
             <Setter Property="Margin" Value="0,0,0,12"/>
         </Style>
 
         <Style x:Key="CodeBlock" TargetType="Border">
-            <Setter Property="Background" Value="#F8F8F8"/>
-            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="12"/>
             <Setter Property="Margin" Value="0,0,0,16"/>
@@ -56,8 +70,8 @@
         </Style>
 
         <Style x:Key="InfoBox" TargetType="Border">
-            <Setter Property="Background" Value="#E8F4FD"/>
-            <Setter Property="BorderBrush" Value="#0E639C"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="16"/>
             <Setter Property="Margin" Value="0,0,0,16"/>
@@ -65,8 +79,8 @@
         </Style>
 
         <Style x:Key="WarningBox" TargetType="Border">
-            <Setter Property="Background" Value="#FFF4E5"/>
-            <Setter Property="BorderBrush" Value="#FF9800"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource WarningBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="16"/>
             <Setter Property="Margin" Value="0,0,0,16"/>
@@ -81,46 +95,46 @@
         </Grid.ColumnDefinitions>
 
         <!-- Sidebar Navigation -->
-        <Border Grid.Column="0" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+        <Border Grid.Column="0" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
             <StackPanel Margin="0,20,0,0">
                 <TextBlock Text="📖 Documentation" 
                           FontSize="18" 
                           FontWeight="Bold"
                           Margin="16,0,0,20"
-                          Foreground="#1E1E1E"/>
+                          Foreground="{DynamicResource TextBrush}"/>
 
                 <Button x:Name="BtnGettingStarted" 
-                        Style="{StaticResource NavButton}"
+                        Style="{DynamicResource NavButton}"
                         Click="NavigateToGettingStarted">
                     <TextBlock Text="🚀 Getting Started"/>
                 </Button>
                 
                 <Button x:Name="BtnSettings" 
-                        Style="{StaticResource NavButton}"
+                        Style="{DynamicResource NavButton}"
                         Click="NavigateToSettings">
                     <TextBlock Text="⚙️ Settings Guide"/>
                 </Button>
                 
                 <Button x:Name="BtnWorkflow" 
-                        Style="{StaticResource NavButton}"
+                        Style="{DynamicResource NavButton}"
                         Click="NavigateToWorkflow">
                     <TextBlock Text="🔄 Workflow &amp; Usage"/>
                 </Button>
                 
                 <Button x:Name="BtnAssetTypes" 
-                        Style="{StaticResource NavButton}"
+                        Style="{DynamicResource NavButton}"
                         Click="NavigateToAssetTypes">
                     <TextBlock Text="📦 Asset Types"/>
                 </Button>
                 
                 <Button x:Name="BtnTroubleshooting" 
-                        Style="{StaticResource NavButton}"
+                        Style="{DynamicResource NavButton}"
                         Click="NavigateToTroubleshooting">
                     <TextBlock Text="🔧 Troubleshooting"/>
                 </Button>
                 
                 <Button x:Name="BtnFAQ" 
-                        Style="{StaticResource NavButton}"
+                        Style="{DynamicResource NavButton}"
                         Click="NavigateToFAQ">
                     <TextBlock Text="❓ FAQ"/>
                 </Button>
@@ -143,8 +157,8 @@
                     
                     <Border Style="{StaticResource InfoBox}">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C" Margin="0,0,0,8">Step 1: Configure BO3 Path</TextBlock>
-                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                            <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource PrimaryBrush}" Margin="0,0,0,8">Step 1: Configure BO3 Path</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource SubtleBrush}">
                                 Go to <Bold>Settings</Bold> and set your Black Ops 3 installation path (where the game is installed).
                                 Example: <Italic>D:\SteamLibrary\steamapps\common\Call of Duty Black Ops III</Italic>
                             </TextBlock>
@@ -153,8 +167,8 @@
 
                     <Border Style="{StaticResource InfoBox}">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C" Margin="0,0,0,8">Step 2: Load GDT Files</TextBlock>
-                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                            <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource PrimaryBrush}" Margin="0,0,0,8">Step 2: Load GDT Files</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource SubtleBrush}">
                                 Click <Bold>GDT Packer</Bold> from the launcher, then click <Bold>Browse GDT Files</Bold> to select your .gdt files.
                                 You can select multiple files at once.
                             </TextBlock>
@@ -163,8 +177,8 @@
 
                     <Border Style="{StaticResource InfoBox}">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C" Margin="0,0,0,8">Step 3: Scan Assets</TextBlock>
-                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                            <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource PrimaryBrush}" Margin="0,0,0,8">Step 3: Scan Assets</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource SubtleBrush}">
                                 Click <Bold>Scan Assets</Bold> to analyze your GDT and find all referenced files (models, textures, sounds, animations, effects).
                                 Echo will search your BO3 installation and report which files exist and which are missing.
                             </TextBlock>
@@ -173,8 +187,8 @@
 
                     <Border Style="{StaticResource InfoBox}">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C" Margin="0,0,0,8">Step 4: Create Package</TextBlock>
-                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                            <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource PrimaryBrush}" Margin="0,0,0,8">Step 4: Create Package</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource SubtleBrush}">
                                 Enter a package name and click <Bold>Create Package from Selection</Bold>.
                                 Echo will copy all files, resolve sound aliases, generate attachment GDTs, and create a ZIP package ready to share!
                             </TextBlock>
@@ -196,7 +210,7 @@
                     
                     <Border Style="{StaticResource CodeBlock}">
                         <StackPanel>
-                            <TextBlock FontFamily="Consolas" FontSize="12" Foreground="#333">
+                            <TextBlock FontFamily="Consolas" FontSize="12" Foreground="{DynamicResource SubtleBrush}">
                                 ✓ Smart path resolution (sound_assets\, model_export\, xanim_export\)<LineBreak/>
                                 ✓ Recursive sound alias chaining (#alias → #alias → file.wav)<LineBreak/>
                                 ✓ Weapon attachment cross-GDT resolution<LineBreak/>
@@ -268,8 +282,8 @@
 
                     <Border Style="{StaticResource InfoBox}">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C">Consolidate (Recommended)</TextBlock>
-                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                            <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource PrimaryBrush}">Consolidate (Recommended)</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="{DynamicResource SubtleBrush}">
                                 Creates a custom CSV file containing <Bold>only</Bold> the sound aliases your GDT uses.<LineBreak/>
                                 Results in much smaller packages since you're not including the entire BO3 sound library.<LineBreak/>
                                 Default filename: <Italic>echo_consolidated.csv</Italic>
@@ -280,7 +294,7 @@
                     <Border Style="{StaticResource CodeBlock}">
                         <StackPanel>
                             <TextBlock FontWeight="SemiBold">Copy Full CSV Files</TextBlock>
-                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="{DynamicResource SubtleBrush}">
                                 Copies the entire original CSV files (can be very large).<LineBreak/>
                                 Use this if you want all sounds from a CSV, not just the ones you reference.
                             </TextBlock>
@@ -290,7 +304,7 @@
                     <Border Style="{StaticResource CodeBlock}">
                         <StackPanel>
                             <TextBlock FontWeight="SemiBold">Skip Sounds</TextBlock>
-                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="{DynamicResource SubtleBrush}">
                                 Don't include any sound files in the package.<LineBreak/>
                                 Use this for model-only or texture-only packages.
                             </TextBlock>
@@ -347,8 +361,8 @@
 
                     <Border Style="{StaticResource InfoBox}">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C">💡 Tip</TextBlock>
-                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                            <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource PrimaryBrush}">💡 Tip</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="{DynamicResource SubtleBrush}">
                                 You can load multiple GDT files at once if your mod uses multiple weapon or asset files!
                             </TextBlock>
                         </StackPanel>
@@ -368,7 +382,7 @@
                     <TextBlock Text="📊 Understanding Scan Results" Style="{StaticResource SubTitle}"/>
                     <Border Style="{StaticResource CodeBlock}">
                         <StackPanel>
-                            <TextBlock FontFamily="Consolas" FontSize="12" Foreground="#333">
+                            <TextBlock FontFamily="Consolas" FontSize="12" Foreground="{DynamicResource SubtleBrush}">
                                 Assets: 156 total<LineBreak/>
                                 Found: 148 files (95%)<LineBreak/>
                                 Missing: 8 files (5%)<LineBreak/>
@@ -398,7 +412,7 @@
                     <TextBlock Text="📂 Package Structure" Style="{StaticResource SubTitle}"/>
                     <Border Style="{StaticResource CodeBlock}">
                         <StackPanel>
-                            <TextBlock FontFamily="Consolas" FontSize="11" Foreground="#333">
+                            <TextBlock FontFamily="Consolas" FontSize="11" Foreground="{DynamicResource SubtleBrush}">
                                 my_weapon_mod.zip<LineBreak/>
                                 ├── source_data\<LineBreak/>
                                 │   └── t9_weapons\<LineBreak/>
@@ -421,8 +435,8 @@
 
                     <Border Style="{StaticResource WarningBox}">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Foreground="#FF9800">⚠️ Important</TextBlock>
-                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                            <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource WarningBrush}">⚠️ Important</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="{DynamicResource SubtleBrush}">
                                 Users should extract the ZIP directly to their Black Ops 3 root folder!<LineBreak/>
                                 Echo maintains the correct directory structure for drag-and-drop installation.
                             </TextBlock>
@@ -473,7 +487,7 @@
 
                     <Border Style="{StaticResource CodeBlock}">
                         <StackPanel>
-                            <TextBlock FontFamily="Consolas" FontSize="11" Foreground="#333">
+                            <TextBlock FontFamily="Consolas" FontSize="11" Foreground="{DynamicResource SubtleBrush}">
                                 Example chain:<LineBreak/>
                                 1. GDT: "fireSound" = "wpn_ar_mygun_fire"<LineBreak/>
                                 2. CSV: wpn_ar_mygun_fire → sound_assets\wpn\ar_fire.wav<LineBreak/>
@@ -501,8 +515,8 @@
 
                     <Border Style="{StaticResource InfoBox}">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Foreground="#0E639C">Smart Resolution</TextBlock>
-                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                            <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource PrimaryBrush}">Smart Resolution</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="{DynamicResource SubtleBrush}">
                                 Echo reads the VALUE from properties like "attachViewModel4" in your weapon GDT,<LineBreak/>
                                 searches common GDT files for an asset with that exact name,<LineBreak/>
                                 extracts the complete attachment definition with all 100+ properties,<LineBreak/>
@@ -527,7 +541,7 @@
                     </TextBlock>
                     <Border Style="{StaticResource InfoBox}">
                         <StackPanel>
-                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                            <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource SubtleBrush}">
                                 1. Verify your BO3 path is correct in Settings<LineBreak/>
                                 2. Check if files actually exist in your BO3 installation<LineBreak/>
                                 3. Make sure you've compiled your mod (run Asset Manager linker)<LineBreak/>
@@ -544,7 +558,7 @@
                     </TextBlock>
                     <Border Style="{StaticResource InfoBox}">
                         <StackPanel>
-                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                            <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource SubtleBrush}">
                                 1. Verify sound alias CSV files exist in sound\aliases\<LineBreak/>
                                 2. Check if sound files are in sound_assets\ (not share\raw\sound\)<LineBreak/>
                                 3. Make sure CSV references the correct file path<LineBreak/>
@@ -560,7 +574,7 @@
                     </TextBlock>
                     <Border Style="{StaticResource InfoBox}">
                         <StackPanel>
-                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                            <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource SubtleBrush}">
                                 1. Check if common GDT files exist (e.g., _wpn_t9_common.gdt)<LineBreak/>
                                 2. Verify "Generate GDT for attachments" is enabled in Settings<LineBreak/>
                                 3. Make sure attachment names in your GDT match those in common files<LineBreak/>
@@ -576,7 +590,7 @@
                     </TextBlock>
                     <Border Style="{StaticResource InfoBox}">
                         <StackPanel>
-                            <TextBlock TextWrapping="Wrap" Foreground="#555">
+                            <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource SubtleBrush}">
                                 1. Check if output directory exists and is writable<LineBreak/>
                                 2. Ensure you have enough disk space<LineBreak/>
                                 3. Close any programs that might have the output file open<LineBreak/>
@@ -592,7 +606,7 @@
                     </TextBlock>
                     <Border Style="{StaticResource CodeBlock}">
                         <StackPanel>
-                            <TextBlock FontFamily="Consolas" FontSize="11" Foreground="#333">
+                            <TextBlock FontFamily="Consolas" FontSize="11" Foreground="{DynamicResource SubtleBrush}">
                                 Log location: Echo app directory<LineBreak/>
                                 Filename: echo_log_YYYYMMDD.txt<LineBreak/>
                                 <LineBreak/>
@@ -607,8 +621,8 @@
 
                     <Border Style="{StaticResource WarningBox}">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Foreground="#FF9800">💡 Still Having Issues?</TextBlock>
-                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="#555">
+                            <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource WarningBrush}">💡 Still Having Issues?</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" Foreground="{DynamicResource SubtleBrush}">
                                 1. Enable "Enable Logging" in Settings → Advanced<LineBreak/>
                                 2. Reproduce the problem<LineBreak/>
                                 3. Check the log file for error details<LineBreak/>

@@ -5,6 +5,63 @@ All notable changes to Echo - Black Ops 3 GDT Parser & Packer will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-10-06
+
+### 🎨 UI/UX Enhancements
+
+**This release focuses on visual polish and user experience improvements with comprehensive theming and tooltip additions.**
+
+#### New Features
+- **4 Complete Themes**: Choose from multiple professionally designed themes
+  - 🌙 **Dark Theme**: Classic dark mode with blue accents (default)
+  - ☀️ **Light Theme**: Bright and clean with blue accents
+  - 🔥 **DevRaw**: Sleek tactical theme with orange accents and deep black
+  - 💜 **Midnight Purple**: Elegant modern theme with vivid purple and mint green
+  
+- **Theme Selector**: Easy theme switching from Settings window
+  - Instant theme preview
+  - Auto-restart prompt when theme changes
+  - Persistent theme preference
+  - Error handling for missing/corrupted themes
+
+- **Comprehensive Tooltips**: 29 helpful tooltips across all windows
+  - File management buttons with clear descriptions
+  - Settings controls explaining each option
+  - Navigation buttons with action previews
+  - Themed tooltip styling matching each theme
+
+#### Improvements
+- **Consistent Theme Coverage**: All UI elements properly themed
+  - Buttons (standard, tool, primary)
+  - ComboBox dropdowns (overrides system defaults)
+  - DataGrid headers and rows
+  - ListBox items and selection
+  - Borders, backgrounds, and surfaces
+  - Text colors and subtle text
+  
+- **Enhanced Accessibility**: Better user guidance
+  - Tooltips explain complex features
+  - Clear action descriptions
+  - Visual feedback for all interactions
+  - Readable text contrast in all themes
+
+#### Technical Changes
+- Added ToolTip styles to all theme files
+- Created DarkTheme.xaml, LightTheme.xaml, DevRawTheme.xaml, MidnightPurpleTheme.xaml
+- Refactored settings to use Theme property (string) instead of UseDarkMode (bool)
+- Added theme fallback handling in App.xaml.cs
+- Fixed Midnight Purple SubtleBrush for better text contrast (#4A3A66)
+
+#### Bug Fixes
+- Fixed white backgrounds in themed windows
+- Fixed navigation button styles not matching theme
+- Fixed ComboBox dropdowns showing light blue system colors
+- Fixed DataGrid headers missing from original themes
+- Fixed button alignment and padding issues
+- Fixed hardcoded colors replaced with DynamicResource
+
+---
+
 ## [1.0.0] - 2025-10-06
 
 ### 🎉 Initial Release

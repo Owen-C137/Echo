@@ -5,6 +5,7 @@
         Height="600" 
         Width="900"
         WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource BackgroundBrush}"
         ResizeMode="NoResize">
     
     <Grid>
@@ -27,21 +28,21 @@
                 
                 <Button x:Name="BtnGeneral" 
                         Content="⚙️ General" 
-                        Style="{StaticResource ToolButton}"
+                        Style="{DynamicResource ToolButton}"
                         Padding="12,10"
                         Margin="0,0,0,8"
                         Click="NavigateToGeneral"/>
                 
                 <Button x:Name="BtnPackaging" 
                         Content="📦 Packaging" 
-                        Style="{StaticResource ToolButton}"
+                        Style="{DynamicResource ToolButton}"
                         Padding="12,10"
                         Margin="0,0,0,8"
                         Click="NavigateToPackaging"/>
                 
                 <Button x:Name="BtnAdvanced" 
                         Content="🔧 Advanced" 
-                        Style="{StaticResource ToolButton}"
+                        Style="{DynamicResource ToolButton}"
                         Padding="12,10"
                         Margin="0,0,0,8"
                         Click="NavigateToAdvanced"/>
@@ -76,6 +77,7 @@
                         <TextBox x:Name="BlackOps3PathTextBox"
                                 Grid.Column="0"
                                 Padding="10"
+                                ToolTip="Path to Call of Duty: Black Ops III folder (e.g., C:\Program Files (x86)\Steam\steamapps\common\Call of Duty Black Ops III)"
                                 VerticalContentAlignment="Center"/>
                         
                         <Button Grid.Column="1" 
@@ -83,8 +85,36 @@
                                Width="100"
                                Height="36"
                                Margin="8,0,0,0"
+                               ToolTip="Browse for your Black Ops 3 installation folder"
                                Click="BrowseBlackOps3Path_Click"/>
                     </Grid>
+
+                    <!-- Theme Selection -->
+                    <TextBlock Text="Appearance" 
+                              FontSize="14" 
+                              FontWeight="SemiBold"
+                              Margin="0,0,0,8"/>
+                    <TextBlock Text="Choose your preferred theme" 
+                              FontSize="12" 
+                              Foreground="{StaticResource SubtleBrush}"
+                              Margin="0,0,0,8"/>
+                    <ComboBox x:Name="ThemeComboBox"
+                             FontSize="13"
+                             Margin="0,0,0,8"
+                             ToolTip="Select your preferred color theme (requires restart)"
+                             SelectionChanged="ThemeComboBox_SelectionChanged">
+                        <ComboBoxItem Content="🌙 Dark Theme" Tag="DarkTheme"/>
+                        <ComboBoxItem Content="☀️ Light Theme" Tag="LightTheme"/>
+                        <ComboBoxItem Content="🔥 DevRaw" Tag="DevRawTheme"/>
+                        <ComboBoxItem Content="💜 Midnight Purple" Tag="MidnightPurpleTheme"/>
+                    </ComboBox>
+                    <TextBlock x:Name="ThemeChangeWarning"
+                              Text="⚠️ Theme changed - restart recommended" 
+                              FontSize="11" 
+                              Foreground="{StaticResource WarningBrush}"
+                              FontStyle="Italic"
+                              Visibility="Collapsed"
+                              Margin="0,0,0,24"/>
 
                     <!-- Save Buttons -->
                     <StackPanel Orientation="Horizontal" 
@@ -130,6 +160,7 @@
                         <TextBox x:Name="OutputDirectoryTextBox"
                                 Grid.Column="0"
                                 Padding="10"
+                                ToolTip="Folder where created packages will be saved"
                                 VerticalContentAlignment="Center"/>
                         
                         <Button Grid.Column="1" 
@@ -137,6 +168,7 @@
                                Width="100"
                                Height="36"
                                Margin="8,0,0,0"
+                               ToolTip="Select where to save created packages"
                                Click="BrowseOutputDirectory_Click"/>
                     </Grid>
 
@@ -168,7 +200,8 @@
                     <ComboBox x:Name="CompressionLevelComboBox"
                              Padding="10"
                              Height="36"
-                             Margin="0,0,0,24">
+                             Margin="0,0,0,24"
+                             ToolTip="Choose between faster packaging or smaller file size">
                         <ComboBoxItem Content="No Compression"/>
                         <ComboBoxItem Content="Fastest"/>
                         <ComboBoxItem Content="Optimal" IsSelected="True"/>
@@ -195,12 +228,14 @@
                     <CheckBox x:Name="IncludeSourceGdtCheckBox"
                              Content="Include source GDT file(s) in package"
                              IsChecked="True"
+                             ToolTip="Add the original GDT files to the package"
                              Margin="0,8,0,16"/>
 
                     <!-- Validate Assets Before Packaging -->
                     <CheckBox x:Name="ValidateAssetsCheckBox"
                              Content="Validate all assets exist before packaging"
                              IsChecked="True"
+                             ToolTip="Check that all asset files exist before creating package"
                              Margin="0,0,0,16"/>
 
                     <!-- Sound Alias Handling -->
@@ -214,7 +249,8 @@
                               Margin="0,0,0,4"/>
                     <ComboBox x:Name="SoundAliasHandlingComboBox"
                              Margin="0,0,12,16"
-                             Height="32">
+                             Height="32"
+                             ToolTip="Consolidate creates smaller packages with only referenced sounds">
                         <ComboBoxItem Content="Consolidate (create custom CSV with only referenced sounds)" IsSelected="True"/>
                         <ComboBoxItem Content="Copy full CSV files (include entire alias files)"/>
                         <ComboBoxItem Content="Skip sounds (don't include sound files)"/>
@@ -224,6 +260,7 @@
                     <CheckBox x:Name="IncludeAttachmentGdtCheckBox"
                              Content="Generate GDT file for resolved attachments"
                              IsChecked="True"
+                             ToolTip="Creates attachment GDT files for weapon scopes, lasers, and other attachments"
                              Margin="0,0,0,4"/>
                     <TextBlock Text="Creates a companion GDT file with full definitions for weapon attachments (scopes, lasers, etc.) found in common GDT files"
                               FontSize="11"

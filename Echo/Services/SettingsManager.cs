@@ -8,6 +8,7 @@ namespace Echo.Services
     {
         // General
         public string BlackOps3Path { get; set; } = string.Empty;
+        public string Theme { get; set; } = "DarkTheme"; // DarkTheme, LightTheme, BlackOps6Theme
         
         // Packaging
         public string? PackageOutputDirectory { get; set; }

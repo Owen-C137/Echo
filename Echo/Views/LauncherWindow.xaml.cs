@@ -55,15 +55,7 @@ namespace Echo.Views
 
         private void UpdateBo3PathDisplay()
         {
-            var path = SettingsManager.CurrentSettings.BlackOps3Path;
-            if (!string.IsNullOrEmpty(path) && Directory.Exists(path))
-            {
-                Bo3PathText.Text = path;
-            }
-            else
-            {
-                Bo3PathText.Text = "Not configured (click Settings)";
-            }
+            // No longer displaying BO3 path in footer (moved to header with version)
         }
 
         private void OpenGdtPacker(object sender, RoutedEventArgs e)
@@ -73,10 +65,19 @@ namespace Echo.Views
             {
                 var packageManager = new GdtPackerWindow();
                 packageManager.Owner = this;
+                
+                // Hide launcher
+                this.Hide();
+                
+                // Show tool as dialog
                 packageManager.ShowDialog();
+                
+                // Show launcher again when tool closes
+                this.Show();
             }
             catch (Exception ex)
             {
+                this.Show(); // Make sure launcher is visible if there's an error
                 Logger.Error("Failed to open GDT Package Manager", ex);
                 MessageBox.Show($"Failed to open Package Manager: {ex.Message}\n\nCheck Logs.txt for details.", 
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);

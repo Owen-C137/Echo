@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
@@ -9,6 +10,8 @@ namespace Echo.Views
 {
     public partial class SettingsWindow : Window
     {
+        private string _originalTheme = "DarkTheme";
+
         public SettingsWindow()
         {
             InitializeComponent();
@@ -23,6 +26,19 @@ namespace Echo.Views
             
             // General
             BlackOps3PathTextBox.Text = settings.BlackOps3Path;
+            
+            // Set theme ComboBox
+            _originalTheme = settings.Theme;
+            var themeItem = ThemeComboBox.Items.Cast<ComboBoxItem>()
+                .FirstOrDefault(item => item.Tag.ToString() == settings.Theme);
+            if (themeItem != null)
+            {
+                ThemeComboBox.SelectedItem = themeItem;
+            }
+            else
+            {
+                ThemeComboBox.SelectedIndex = 0; // Default to Dark
+            }
             
             // Packaging
             OutputDirectoryTextBox.Text = settings.PackageOutputDirectory ?? 
@@ -39,6 +55,22 @@ namespace Echo.Views
             EnableLoggingCheckBox.IsChecked = settings.EnableLogging;
             AutoOpenLogsCheckBox.IsChecked = settings.AutoOpenLogsOnError;
             PackageNamePatternTextBox.Text = settings.PackageNamePattern ?? "echo_packaged_{date}_{time}";
+        }
+
+        private void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ThemeComboBox.SelectedItem is ComboBoxItem selectedItem)
+            {
+                string? newTheme = selectedItem.Tag?.ToString();
+                if (!string.IsNullOrEmpty(newTheme) && newTheme != _originalTheme)
+                {
+                    ThemeChangeWarning.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    ThemeChangeWarning.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         private void NavigateToGeneral(object sender, RoutedEventArgs e)
@@ -155,6 +187,11 @@ namespace Echo.Views
             // General
             settings.BlackOps3Path = BlackOps3PathTextBox.Text;
             
+            // Check if theme changed
+            string newTheme = (ThemeComboBox.SelectedItem as ComboBoxItem)?.Tag.ToString() ?? "DarkTheme";
+            bool themeChanged = settings.Theme != newTheme;
+            settings.Theme = newTheme;
+            
             // Packaging
             settings.PackageOutputDirectory = OutputDirectoryTextBox.Text;
             settings.CompressionLevel = CompressionLevelComboBox.SelectedIndex;
@@ -172,10 +209,35 @@ namespace Echo.Views
             SettingsManager.Save();
             
             Logger.Info("Settings saved successfully");
-            MessageBox.Show("Settings saved successfully!", 
-                          "Success", 
-                          MessageBoxButton.OK, 
-                          MessageBoxImage.Information);
+            
+            // Show message about restart if theme changed
+            if (themeChanged)
+            {
+                var result = MessageBox.Show(
+                    "Theme changed successfully!\n\n" +
+                    "Would you like to restart the application now to apply the new theme?",
+                    "Restart Application?",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+                
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Restart the application
+                    var fileName = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+                    if (!string.IsNullOrEmpty(fileName))
+                    {
+                        System.Diagnostics.Process.Start(fileName);
+                        Application.Current.Shutdown();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Settings saved successfully!", 
+                              "Success", 
+                              MessageBoxButton.OK, 
+                              MessageBoxImage.Information);
+            }
             
             DialogResult = true;
             Close();

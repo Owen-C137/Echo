@@ -4,6 +4,7 @@
         Title="Echo - Black Ops 3 Multi-Tool" 
         Height="600" Width="900"
         WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource BackgroundBrush}"
         ResizeMode="CanMinimize">
     
     <Grid>
@@ -18,23 +19,34 @@
         <Border Grid.Row="0" 
                 Background="{StaticResource PrimaryBrush}" 
                 Padding="32,24">
-            <StackPanel>
-                <TextBlock Text="ECHO" 
-                           FontSize="36" 
-                           FontWeight="Bold" 
-                           Foreground="White"/>
-                <TextBlock Text="Black Ops 3 Multi-Tool Suite" 
-                           FontSize="16" 
-                           Foreground="White" 
-                           Opacity="0.9"
-                           Margin="0,4,0,0"/>
-            </StackPanel>
+            <Grid>
+                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock Text="ECHO" 
+                               FontSize="36" 
+                               FontWeight="Bold" 
+                               Foreground="{StaticResource TextBrush}"/>
+                    <TextBlock Text="Black Ops 3 Multi-Tool Suite" 
+                               FontSize="16" 
+                               Foreground="{StaticResource TextBrush}" 
+                               Opacity="0.9"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+                
+                <TextBlock x:Name="VersionText"
+                          Text="v1.0.1" 
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Center"
+                          FontSize="16"
+                          FontWeight="SemiBold"
+                          Foreground="{StaticResource TextBrush}"
+                          Opacity="0.9"/>
+            </Grid>
         </Border>
 
         <!-- Update Notification Banner (Hidden by default) -->
         <Border x:Name="UpdateNotificationBanner"
                 Grid.Row="1" 
-                Background="#4CAF50"
+                Background="{StaticResource SuccessBrush}"
                 Visibility="Collapsed"
                 Cursor="Hand"
                 Padding="16,12"
@@ -56,13 +68,13 @@
                            VerticalAlignment="Center">
                     <TextBlock FontSize="14"
                               FontWeight="SemiBold"
-                              Foreground="White">
+                              Foreground="{StaticResource TextBrush}">
                         <Run Text="Update Available: "/>
                         <Run x:Name="UpdateVersionLabel" Text="v1.1.0"/>
                     </TextBlock>
                     <TextBlock Text="Click here to download and install"
                               FontSize="12"
-                              Foreground="White"
+                              Foreground="{StaticResource TextBrush}"
                               Opacity="0.9"
                               Margin="0,2,0,0"/>
                 </StackPanel>
@@ -70,7 +82,7 @@
                 <TextBlock Grid.Column="2"
                           Text="→"
                           FontSize="20"
-                          Foreground="White"
+                          Foreground="{StaticResource TextBrush}"
                           VerticalAlignment="Center"
                           Margin="12,0,0,0"/>
             </Grid>
@@ -88,9 +100,10 @@
                            Margin="0,0,0,20"/>
 
                 <!-- Tool Buttons -->
-                <Button Style="{StaticResource ToolButton}" 
+                <Button Style="{DynamicResource ToolButton}" 
                         Height="120"
                         Margin="0,0,0,16"
+                        ToolTip="Open the GDT Package Manager to create asset packages"
                         Click="OpenGdtPacker">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -133,7 +146,7 @@
                 </Button>
 
                 <!-- Placeholder for future tools -->
-                <Button Style="{StaticResource ToolButton}" 
+                <Button Style="{DynamicResource ToolButton}" 
                         Height="120"
                         Margin="0,0,0,16"
                         IsEnabled="False"
@@ -145,7 +158,7 @@
                         </Grid.ColumnDefinitions>
                         
                         <Border Grid.Column="0" 
-                                Background="#9E9E9E" 
+                                Background="{StaticResource BorderBrush}" 
                                 CornerRadius="8"
                                 Width="64" Height="64"
                                 HorizontalAlignment="Left">
@@ -170,7 +183,7 @@
                     </Grid>
                 </Button>
 
-                <Button Style="{StaticResource ToolButton}" 
+                <Button Style="{DynamicResource ToolButton}" 
                         Height="120"
                         Margin="0,0,0,16"
                         IsEnabled="False"
@@ -182,7 +195,7 @@
                         </Grid.ColumnDefinitions>
                         
                         <Border Grid.Column="0" 
-                                Background="#9E9E9E" 
+                                Background="{StaticResource BorderBrush}" 
                                 CornerRadius="8"
                                 Width="64" Height="64"
                                 HorizontalAlignment="Left">
@@ -215,44 +228,28 @@
                 BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="0,1,0,0"
                 Padding="32,16">
-            <Grid>
-                <StackPanel Orientation="Horizontal" 
-                           HorizontalAlignment="Left">
-                    <Button Content="⚙️ Settings" 
-                            Width="120" 
-                            Click="OpenSettings"
-                            Margin="0,0,8,0"/>
-                    <Button Content="📖 Docs" 
-                            Width="120" 
-                            Click="OpenDocs"
-                            Margin="0,0,8,0"/>
-                    <Button Content="📋 Changelog" 
-                            Width="120" 
-                            Click="OpenChangelog"
-                            Margin="0,0,8,0"/>
-                    <Button Content="🔄 Check for Updates" 
-                            Width="150"
-                            Click="CheckForUpdates_Click"/>
-                </StackPanel>
-                
-                <StackPanel Orientation="Horizontal" 
-                           HorizontalAlignment="Right">
-                    <TextBlock x:Name="VersionText"
-                              Text="v1.0.0" 
-                              Foreground="{StaticResource SubtleBrush}"
-                              VerticalAlignment="Center"
-                              Margin="0,0,16,0"
-                              FontSize="11"/>
-                    <TextBlock Text="BO3 Path: " 
-                              Foreground="{StaticResource SubtleBrush}"
-                              VerticalAlignment="Center"/>
-                    <TextBlock x:Name="Bo3PathText" 
-                              Text="Not configured" 
-                              Foreground="{StaticResource TextBrush}"
-                              VerticalAlignment="Center"
-                              FontWeight="SemiBold"/>
-                </StackPanel>
-            </Grid>
+            <StackPanel Orientation="Horizontal" 
+                       HorizontalAlignment="Left">
+                <Button Content="⚙️ Settings" 
+                        Width="120" 
+                        ToolTip="Configure game path, theme, and other settings"
+                        Click="OpenSettings"
+                        Margin="0,0,8,0"/>
+                <Button Content="📖 Docs" 
+                        Width="120" 
+                        ToolTip="View documentation and user guide"
+                        Click="OpenDocs"
+                        Margin="0,0,8,0"/>
+                <Button Content="📋 Changelog" 
+                        Width="120" 
+                        ToolTip="View version history and release notes"
+                        Click="OpenChangelog"
+                        Margin="0,0,8,0"/>
+                <Button Content="🔄 Check for Updates" 
+                        Width="150"
+                        ToolTip="Check for new versions of Echo"
+                        Click="CheckForUpdates_Click"/>
+            </StackPanel>
         </Border>
     </Grid>
 </Window>

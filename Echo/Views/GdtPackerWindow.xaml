@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Echo - GDT Package Manager" 
         Height="700" Width="1200"
+        Background="{DynamicResource BackgroundBrush}"
         WindowStartupLocation="CenterScreen">
     
     <Grid>
@@ -39,14 +40,14 @@
                 <StackPanel Grid.Row="1" Margin="12">
                     <Button x:Name="BtnScanCreate" 
                             Content="📦 Scan &amp; Create" 
-                            Style="{StaticResource ToolButton}"
+                            Style="{DynamicResource ToolButton}"
                             Padding="16,12"
                             Margin="0,0,0,8"
                             Click="NavigateToScanCreate"/>
                     
                     <Button x:Name="BtnAssetTree" 
-                            Content="🌲 Asset Tree" 
-                            Style="{StaticResource ToolButton}"
+                            Content="🔍 Asset Browser" 
+                            Style="{DynamicResource ToolButton}"
                             Padding="16,12"
                             Margin="0,0,0,8"
                             Click="NavigateToAssetTree"/>
@@ -54,7 +55,7 @@
                     <Separator Margin="0,12"/>
                     
                     <Button Content="⚙️ Settings" 
-                            Style="{StaticResource ToolButton}"
+                            Style="{DynamicResource ToolButton}"
                             Padding="16,12"
                             Margin="0,8,0,8"
                             Click="OpenSettings"/>
@@ -75,128 +76,197 @@
                 <Grid x:Name="ScanCreatePanel" Visibility="Visible">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel Margin="32">
-                            <TextBlock Text="Scan &amp; Create Package" 
+                            <!-- Header -->
+                            <TextBlock Text="Package Creator" 
                                       FontSize="28" 
                                       FontWeight="Bold"
                                       Margin="0,0,0,8"/>
-                            <TextBlock Text="Select GDT files to scan for assets and create a package" 
+                            <TextBlock Text="Scan GDT files, configure options, and create asset packages" 
                                       FontSize="14" 
                                       Foreground="{StaticResource SubtleBrush}"
-                                      Margin="0,0,0,32"/>
+                                      Margin="0,0,0,24"/>
 
                             <!-- GDT Files Section -->
-                            <TextBlock Text="1. Select GDT Files" 
-                                      FontSize="18" 
-                                      FontWeight="SemiBold"
-                                      Margin="0,0,0,12"/>
-                            
                             <Border Background="{StaticResource SurfaceBrush}"
                                    BorderBrush="{StaticResource BorderBrush}"
                                    BorderThickness="1"
                                    CornerRadius="8"
                                    Padding="16"
                                    Margin="0,0,0,16">
-                                <StackPanel>
-                                    <ListBox x:Name="GdtFilesList"
-                                            Height="200"
-                                            Margin="0,0,0,12">
-                                        <!-- Files will be added here -->
-                                    </ListBox>
-                                    
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button Content="+ Add GDT Files" 
-                                               Width="140"
-                                               Margin="0,0,8,0"
-                                               Click="AddGdtFiles"/>
-                                        <Button Content="Remove Selected" 
-                                               Width="140"
-                                               Click="RemoveGdtFile"/>
-                                    </StackPanel>
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Header with Actions -->
+                                    <Grid Grid.Row="0" Margin="0,0,0,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" 
+                                                  Text="📂 GDT FILES" 
+                                                  FontSize="14" 
+                                                  FontWeight="Bold"
+                                                  VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                            <Button Content="➕ Add" 
+                                                   Width="80"
+                                                   Height="32"
+                                                   Margin="0,0,6,0"
+                                                   ToolTip="Add GDT files to scan for assets"
+                                                   Click="AddGdtFiles"/>
+                                            <Button Content="🗑️ Remove" 
+                                                   Width="90"
+                                                   Height="32"
+                                                   Margin="0,0,6,0"
+                                                   ToolTip="Remove selected GDT files from the list"
+                                                   Click="RemoveSelectedGdtFiles"/>
+                                            <Button Content="🔄 Clear All" 
+                                                   Width="100"
+                                                   Height="32"
+                                                   ToolTip="Clear all loaded GDT files"
+                                                   Click="ClearAllGdtFiles"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Drag & Drop Zone (30%) + DataGrid (70%) -->
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="3*"/>
+                                            <ColumnDefinition Width="12"/>
+                                            <ColumnDefinition Width="7*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Drag & Drop Zone -->
+                                        <Border Grid.Column="0"
+                                               x:Name="GdtDropZone"
+                                               Background="{StaticResource SurfaceBrush}"
+                                               BorderBrush="{StaticResource PrimaryBrush}"
+                                               BorderThickness="2"
+                                               CornerRadius="8"
+                                               Padding="20"
+                                               AllowDrop="True"
+                                               Drop="GdtDropZone_Drop"
+                                               DragOver="GdtDropZone_DragOver"
+                                               MinHeight="250">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                                                            <Setter Property="Background" Value="{StaticResource HoverBrush}"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock Text="📥" 
+                                                          FontSize="48" 
+                                                          HorizontalAlignment="Center"
+                                                          Margin="0,0,0,12"/>
+                                                <TextBlock Text="Drag &amp; drop" 
+                                                          FontSize="14" 
+                                                          FontWeight="SemiBold"
+                                                          HorizontalAlignment="Center"
+                                                          Margin="0,0,0,4"/>
+                                                <TextBlock Text="GDT files here" 
+                                                          FontSize="14" 
+                                                          FontWeight="SemiBold"
+                                                          HorizontalAlignment="Center"
+                                                          Margin="0,0,0,8"/>
+                                                <TextBlock Text="or click Add above" 
+                                                          FontSize="11" 
+                                                          Foreground="{StaticResource SubtleBrush}"
+                                                          HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- GDT Files DataGrid -->
+                                        <DataGrid x:Name="GdtFilesGrid" 
+                                                 Grid.Column="2"
+                                                 AutoGenerateColumns="False"
+                                                 CanUserAddRows="False"
+                                                 CanUserDeleteRows="False"
+                                                 IsReadOnly="True"
+                                                 GridLinesVisibility="Horizontal"
+                                                 HeadersVisibility="Column"
+                                                 AlternatingRowBackground="{StaticResource AlternateRowBrush}"
+                                                 RowHeight="36"
+                                                 MinHeight="250"
+                                                 SelectionMode="Extended">
+                                            <DataGrid.Columns>
+                                                <DataGridCheckBoxColumn Header="✓" Width="40" Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <DataGridTextColumn Header="File Name" Width="2*" Binding="{Binding FileName}"/>
+                                                <DataGridTextColumn Header="Size" Width="100" Binding="{Binding FileSizeFormatted}"/>
+                                                <DataGridTextColumn Header="Est. Assets" Width="100" Binding="{Binding EstimatedAssets}"/>
+                                                <DataGridTextColumn Header="Modified" Width="150" Binding="{Binding LastModifiedFormatted}"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Grid>
+                                </Grid>
                             </Border>
 
-                            <!-- Scan Section -->
-                            <TextBlock Text="2. Scan Assets" 
-                                      FontSize="18" 
-                                      FontWeight="SemiBold"
-                                      Margin="0,24,0,12"/>
-                            
+                            <!-- Package Options -->
                             <Border Background="{StaticResource SurfaceBrush}"
                                    BorderBrush="{StaticResource BorderBrush}"
                                    BorderThickness="1"
                                    CornerRadius="8"
-                                   Padding="16"
+                                   Padding="20"
                                    Margin="0,0,0,16">
                                 <StackPanel>
-                                    <TextBlock Text="Scan the selected GDT files to discover all referenced assets and dependencies."
+                                    <TextBlock Text="📦 PACKAGE OPTIONS" 
+                                              FontSize="14" 
+                                              FontWeight="Bold"
+                                              Margin="0,0,0,16"/>
+
+                                    <!-- Status Text -->
+                                    <TextBlock x:Name="ScanStatusText" 
+                                              Text="Ready to scan..." 
+                                              FontSize="12"
                                               Foreground="{StaticResource SubtleBrush}"
                                               TextWrapping="Wrap"
                                               Margin="0,0,0,16"/>
-                                    
+
+                                    <!-- Find Missing Files Button (shown when files are missing) -->
+                                    <Button x:Name="FindMissingFilesButton"
+                                           Content="🔍 Find Missing Files" 
+                                           Background="{StaticResource WarningBrush}"
+                                           Foreground="{StaticResource TextBrush}"
+                                           BorderThickness="0"
+                                           Height="40"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           ToolTip="Search your system to locate missing asset files"
+                                           Click="FindMissingFiles_Click"
+                                           Cursor="Hand"
+                                           Margin="0,0,0,16"
+                                           Visibility="Collapsed">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                       CornerRadius="6"
+                                                       Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+
+                                    <!-- Scan Button -->
                                     <Button x:Name="ScanButton"
-                                           Content="🔍 Start Scan" 
+                                           Content="🔍 SCAN GDT FILES" 
                                            Style="{StaticResource PrimaryButton}"
-                                           Width="200"
-                                           Padding="16,10"
-                                           HorizontalAlignment="Left"
-                                           Click="StartScan"/>
-                                    
-                                    <TextBlock x:Name="ScanStatus" 
-                                              Text="Ready to scan..."
-                                              Margin="0,12,0,0"
-                                              Foreground="{StaticResource SubtleBrush}"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- Package Name Section -->
-                            <TextBlock Text="3. Package Name" 
-                                      FontSize="18" 
-                                      FontWeight="SemiBold"
-                                      Margin="0,24,0,12"/>
-                            
-                            <Border Background="{StaticResource SurfaceBrush}"
-                                   BorderBrush="{StaticResource BorderBrush}"
-                                   BorderThickness="1"
-                                   CornerRadius="8"
-                                   Padding="16"
-                                   Margin="0,0,0,16">
-                                <StackPanel>
-                                    <TextBlock Text="Enter a custom package name (or leave blank for auto-generated name)"
-                                              Foreground="{StaticResource SubtleBrush}"
-                                              TextWrapping="Wrap"
-                                              Margin="0,0,0,8"/>
-                                    
-                                    <TextBox x:Name="PackageNameTextBox"
-                                            Padding="10"
-                                            Height="36"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- Create Package Section -->
-                            <TextBlock Text="4. Create Package" 
-                                      FontSize="18" 
-                                      FontWeight="SemiBold"
-                                      Margin="0,24,0,12"/>
-                            
-                            <Border Background="{StaticResource SurfaceBrush}"
-                                   BorderBrush="{StaticResource BorderBrush}"
-                                   BorderThickness="1"
-                                   CornerRadius="8"
-                                   Padding="16">
-                                <StackPanel>
-                                    <Button x:Name="CreatePackageButton"
-                                           Content="📦 Create Package" 
-                                           Style="{StaticResource PrimaryButton}"
-                                           Width="200"
-                                           Padding="16,10"
-                                           HorizontalAlignment="Left"
-                                           IsEnabled="False"
-                                           Click="CreatePackage"/>
-                                    
-                                    <TextBlock x:Name="PackageStatus" 
-                                              Text="Scan assets first before creating a package."
-                                              Margin="0,12,0,0"
-                                              Foreground="{StaticResource SubtleBrush}"/>
+                                           Height="50"
+                                           FontSize="15"
+                                           FontWeight="Bold"
+                                           ToolTip="Scan all loaded GDT files and discover referenced assets"
+                                           Click="ScanGdtFiles"
+                                           IsEnabled="False"/>
                                 </StackPanel>
                             </Border>
                         </StackPanel>
@@ -204,38 +274,418 @@
                 </Grid>
 
                 <Grid x:Name="AssetTreePanel" Visibility="Collapsed">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel Margin="32">
-                            <TextBlock Text="Asset Tree" 
+                    <Grid Margin="32">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Header -->
+                        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                            <TextBlock Text="Asset Browser" 
                                       FontSize="28" 
                                       FontWeight="Bold"
                                       Margin="0,0,0,8"/>
-                            <TextBlock Text="View discovered assets and their dependencies" 
+                            <TextBlock Text="View, filter, and select discovered assets" 
                                       FontSize="14" 
-                                      Foreground="{StaticResource SubtleBrush}"
-                                      Margin="0,0,0,32"/>
+                                      Foreground="{StaticResource SubtleBrush}"/>
+                        </StackPanel>
 
-                            <Border Background="{StaticResource SurfaceBrush}"
+                        <!-- Statistics Dashboard -->
+                        <Border Grid.Row="1" 
+                               Background="{StaticResource PrimaryBrush}"
+                               BorderBrush="{StaticResource BorderBrush}"
+                               BorderThickness="1"
+                               CornerRadius="8"
+                               Padding="20"
+                               Margin="0,0,0,16">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Total Assets -->
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="📦 TOTAL ASSETS" 
+                                              FontSize="11" 
+                                              FontWeight="Bold"
+                                              Foreground="{StaticResource SubtleBrush}"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock x:Name="StatsTotal" 
+                                              Text="0" 
+                                              FontSize="24" 
+                                              FontWeight="Bold"
+                                              Foreground="{StaticResource TextBrush}"/>
+                                </StackPanel>
+
+                                <!-- Total Size -->
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="💾 TOTAL SIZE" 
+                                              FontSize="11" 
+                                              FontWeight="Bold"
+                                              Foreground="{StaticResource SubtleBrush}"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock x:Name="StatsSize" 
+                                              Text="0 MB" 
+                                              FontSize="24" 
+                                              FontWeight="Bold"
+                                              Foreground="{StaticResource TextBrush}"/>
+                                </StackPanel>
+
+                                <!-- Selected -->
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="✓ SELECTED" 
+                                              FontSize="11" 
+                                              FontWeight="Bold"
+                                              Foreground="{StaticResource SubtleBrush}"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock x:Name="StatsSelected" 
+                                              Text="0" 
+                                              FontSize="24" 
+                                              FontWeight="Bold"
+                                              Foreground="{StaticResource SuccessBrush}"/>
+                                </StackPanel>
+
+                                <!-- Missing -->
+                                <StackPanel Grid.Column="3">
+                                    <TextBlock Text="❌ MISSING" 
+                                              FontSize="11" 
+                                              FontWeight="Bold"
+                                              Foreground="{StaticResource SubtleBrush}"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock x:Name="StatsMissing" 
+                                              Text="0" 
+                                              FontSize="24" 
+                                              FontWeight="Bold"
+                                              Foreground="{StaticResource ErrorBrush}"/>
+                                </StackPanel>
+
+                                <!-- Actions -->
+                                <StackPanel Grid.Column="4" 
+                                           Orientation="Horizontal" 
+                                           VerticalAlignment="Center"
+                                           Margin="20,0,0,0">
+                                    <Button Content="🔄 Refresh" 
+                                           Width="100"
+                                           Height="36"
+                                           Margin="0,0,8,0"
+                                           ToolTip="Refresh the asset tree and update statistics"
+                                           Click="RefreshAssetTree"/>
+                                    <Button Content="📤 Export" 
+                                           Width="100"
+                                           Height="36"
+                                           ToolTip="Export the asset list to a CSV or text file"
+                                           Click="ExportAssetList"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Toolbar -->
+                        <Border Grid.Row="2" 
+                               Background="{StaticResource SurfaceBrush}"
+                               BorderBrush="{StaticResource BorderBrush}"
+                               BorderThickness="1"
+                               CornerRadius="8"
+                               Padding="12"
+                               Margin="0,0,0,16">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Search Box -->
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <TextBlock Text="🔍" 
+                                              FontSize="18" 
+                                              VerticalAlignment="Center"
+                                              Margin="0,0,8,0"/>
+                                    <TextBox x:Name="SearchBox" 
+                                            Width="400"
+                                            Height="32"
+                                            VerticalContentAlignment="Center"
+                                            Padding="8,0"
+                                            ToolTip="Filter assets by name, type, or file path"
+                                            TextChanged="SearchBox_TextChanged">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox">
+                                                <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                                                <Setter Property="Background" Value="White"/>
+                                                <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+                                                <Setter Property="BorderThickness" Value="1"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="Text" Value="">
+                                                        <Setter Property="Background">
+                                                            <Setter.Value>
+                                                                <VisualBrush Stretch="None" AlignmentX="Left">
+                                                                    <VisualBrush.Visual>
+                                                                        <TextBlock Text="Search assets by name, type, or path..." 
+                                                                                  Foreground="{StaticResource SubtleBrush}"
+                                                                                  Padding="8,0"/>
+                                                                    </VisualBrush.Visual>
+                                                                </VisualBrush>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
+                                </StackPanel>
+
+                                <!-- Filter Options -->
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="12,0,0,0">
+                                    <CheckBox x:Name="FilterShowMissingOnly" 
+                                             Content="Show Missing Only" 
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,12,0"
+                                             ToolTip="Display only assets with missing files"
+                                             Checked="FilterChanged"
+                                             Unchecked="FilterChanged"/>
+                                    <CheckBox x:Name="FilterShowSelectedOnly" 
+                                             Content="Show Selected Only" 
+                                             VerticalAlignment="Center"
+                                             ToolTip="Display only assets that are currently selected"
+                                             Checked="FilterChanged"
+                                             Unchecked="FilterChanged"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Split View: TreeView (Left) + DataGrid (Right) -->
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="280"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Left: Asset Type Tree (spans both rows) -->
+                            <Border Grid.Column="0"
+                                   Grid.Row="0"
+                                   Grid.RowSpan="2"
+                                   Background="{StaticResource SurfaceBrush}"
                                    BorderBrush="{StaticResource BorderBrush}"
                                    BorderThickness="1"
                                    CornerRadius="8"
-                                   Padding="16">
-                                <StackPanel>
-                                    <TreeView x:Name="AssetTreeView" Height="400">
-                                        <!-- Asset tree will be populated here -->
-                                    </TreeView>
-                                    
+                                   Padding="12">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" 
+                                              Text="ASSET TYPES" 
+                                              FontSize="12" 
+                                              FontWeight="Bold"
+                                              Foreground="{StaticResource SubtleBrush}"
+                                              Margin="0,0,0,12"/>
+
+                                    <ListBox x:Name="AssetTypeList" 
+                                             Grid.Row="1"
+                                             BorderThickness="0"
+                                             Background="Transparent"
+                                             SelectionMode="Single"
+                                             SelectionChanged="AssetTypeList_SelectionChanged">
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="Padding" Value="8"/>
+                                                <Setter Property="Margin" Value="0,0,0,4"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ListBoxItem">
+                                                            <Border Background="{TemplateBinding Background}"
+                                                                   BorderBrush="{StaticResource BorderBrush}"
+                                                                   BorderThickness="1"
+                                                                   CornerRadius="6"
+                                                                   Padding="{TemplateBinding Padding}">
+                                                                <ContentPresenter/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsSelected" Value="True">
+                                                                    <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+                                                                    <Setter Property="Foreground" Value="White"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    
+                                                    <TextBlock Grid.Column="0" 
+                                                              Text="{Binding Icon}" 
+                                                              FontSize="16"
+                                                              Margin="0,0,8,0"
+                                                              VerticalAlignment="Center"/>
+                                                    
+                                                    <TextBlock Grid.Column="1" 
+                                                              Text="{Binding TypeName}" 
+                                                              FontSize="13"
+                                                              FontWeight="SemiBold"
+                                                              VerticalAlignment="Center"/>
+                                                    
+                                                    <Border Grid.Column="2"
+                                                           Background="{StaticResource BorderBrush}"
+                                                           CornerRadius="10"
+                                                           Padding="8,2"
+                                                           Margin="8,0,0,0">
+                                                        <TextBlock Text="{Binding Count}" 
+                                                                  FontSize="11"
+                                                                  FontWeight="Bold"
+                                                                  Foreground="{StaticResource TextBrush}"/>
+                                                    </Border>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+
+                                    <StackPanel Grid.Row="2" Margin="0,12,0,0">
+                                        <Button Content="☑ Select All" 
+                                               Height="32"
+                                               HorizontalAlignment="Stretch"
+                                               Margin="0,0,0,6"
+                                               Padding="8,4"
+                                               FontSize="12"
+                                               ToolTip="Select all assets in the current view"
+                                               Click="SelectAllAssets"/>
+                                        <Button Content="☐ Deselect All" 
+                                               Height="32"
+                                               HorizontalAlignment="Stretch"
+                                               Padding="8,4"
+                                               FontSize="12"
+                                               ToolTip="Deselect all selected assets"
+                                               Click="DeselectAllAssets"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- Right: Asset Details Grid -->
+                            <Border Grid.Column="2"
+                                   Grid.Row="0"
+                                   Background="{StaticResource SurfaceBrush}"
+                                   BorderBrush="{StaticResource BorderBrush}"
+                                   BorderThickness="1"
+                                   CornerRadius="8"
+                                   Padding="12">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" 
+                                              x:Name="AssetGridTitle"
+                                              Text="ALL ASSETS" 
+                                              FontSize="12" 
+                                              FontWeight="Bold"
+                                              Foreground="{StaticResource SubtleBrush}"
+                                              Margin="0,0,0,12"/>
+
+                                    <DataGrid x:Name="AssetDataGrid" 
+                                             Grid.Row="1"
+                                             AutoGenerateColumns="False"
+                                             CanUserAddRows="False"
+                                             CanUserDeleteRows="False"
+                                             IsReadOnly="True"
+                                             GridLinesVisibility="Horizontal"
+                                             HeadersVisibility="Column"
+                                             AlternatingRowBackground="{StaticResource AlternateRowBrush}"
+                                             RowHeight="32"
+                                             SelectionMode="Single"
+                                             SelectionChanged="AssetDataGrid_SelectionChanged">
+                                        <DataGrid.Columns>
+                                            <DataGridCheckBoxColumn Header="✓" Width="40" Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            <DataGridTextColumn Header="Asset Name" Width="2*" Binding="{Binding AssetName}"/>
+                                            <DataGridTextColumn Header="Type" Width="*" Binding="{Binding AssetType}"/>
+                                            <DataGridTextColumn Header="Size" Width="100" Binding="{Binding FileSizeFormatted}"/>
+                                            <DataGridTextColumn Header="Status" Width="80" Binding="{Binding StatusText}"/>
+                                            <DataGridTextColumn Header="Path" Width="3*" Binding="{Binding RelativePath}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+                            </Border>
+
+                            <!-- Bottom: Details Panel (aligned with DataGrid) -->
+                            <Border Grid.Row="1" 
+                                   Grid.Column="2"
+                                   Background="{StaticResource SurfaceBrush}"
+                                   BorderBrush="{StaticResource BorderBrush}"
+                                   BorderThickness="1"
+                                   CornerRadius="8"
+                                   Padding="16"
+                                   Margin="0,8,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock x:Name="DetailsAssetName" 
+                                              Text="📝 Select an asset to view details" 
+                                              FontSize="14" 
+                                              FontWeight="SemiBold"
+                                              Margin="0,0,0,8"/>
+                                    <TextBlock x:Name="DetailsFullPath" 
+                                              Text="" 
+                                              FontSize="12" 
+                                              Foreground="{StaticResource SubtleBrush}"
+                                              TextWrapping="Wrap"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" 
+                                           VerticalAlignment="Center"
+                                           Margin="16,0,0,0">
+                                    <!-- Package Name Input -->
+                                    <TextBlock Text="Package Name (Optional)" 
+                                              FontSize="11" 
+                                              Foreground="{StaticResource SubtleBrush}"
+                                              Margin="0,0,0,4"/>
+                                    <TextBox x:Name="PackageNameTextBox"
+                                            Width="280"
+                                            Padding="8"
+                                            Height="32"
+                                            FontSize="13"
+                                            ToolTip="Enter a custom name for the package (optional, will use timestamp if empty)"
+                                            Margin="0,0,0,8"/>
                                     <Button Content="📦 Create Package from Selection" 
                                            Style="{StaticResource PrimaryButton}"
-                                           Width="250"
-                                           Margin="0,16,0,0"
-                                           Padding="16,10"
-                                           HorizontalAlignment="Left"
+                                           Width="280"
+                                           Height="42"
+                                           Padding="12,8"
+                                           ToolTip="Create a ZIP package containing all selected assets and their dependencies"
                                            Click="CreatePackage"/>
                                 </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
+                            </Grid>
+                        </Border>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </Border>
